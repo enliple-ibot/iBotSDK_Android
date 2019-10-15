@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebViewClient(webViewClient);
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
+        
 
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
