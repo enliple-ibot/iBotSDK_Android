@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IBotSDK</string>
+    <string name="hello_ibot">반가워요~ 인공지능 상담봇 입니다!</string>
+</resources>

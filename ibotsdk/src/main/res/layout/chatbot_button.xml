@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/layer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <RelativeLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:background="@drawable/bar_bg">
+
+
+            <RelativeLayout
+                android:id="@+id/buttonClose"
+                android:layout_width="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/buttonCloseImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ibot_ico_close"/>
+
+
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textExplain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosanskr_regular"
+                android:visibility="invisible"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="@string/hello_ibot"
+                android:textColor="@color/ibot_text_color"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/buttonBg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ibot_icon">
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

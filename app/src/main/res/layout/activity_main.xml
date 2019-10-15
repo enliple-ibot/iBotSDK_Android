@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_launcher_background"
+    tools:context=".MainActivity">
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <com.enliple.ibotsdk.widget.ChatBotButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="17dp"
+        app:buttonBg="@drawable/ibot_icon"
+        app:barBg="@color/bar_background"
+        app:barText="@string/hello_ibot"
+        app:barTextColor="@color/ibot_text_color"
+        app:barTextSize="15"
+        app:buttonCloseIcon="@drawable/ibot_ico_close"
+        app:size="60"
+        app:type="0"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/actionButton"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="60dp"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+
+</RelativeLayout>
