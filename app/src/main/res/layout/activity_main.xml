@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_margin="17dp"
+        android:layout_margin="18dp"
         app:buttonBg="@drawable/ibot_icon"
         app:barBg="@color/bar_background"
         app:barText="@string/hello_ibot"
