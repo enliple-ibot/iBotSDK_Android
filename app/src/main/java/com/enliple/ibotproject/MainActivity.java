@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
 
-//        webView.loadUrl("https://superbeeracing.com");
-//        webView.loadUrl("http://www.naver.com");
-
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
