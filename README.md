@@ -1,7 +1,8 @@
 # iBotSDK_Android
 
 # IBotChatButton Customizing
-![image](https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png){:height="50%" width="50%"}
+![image](https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png)
+<img src="https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png" width="520" height="195">
 # @ attribute
 ### buttonBg : 버튼의 이미지 설정(정사각형 이미지)
 ### barBg : 확장 영역의 배경 색상값 설정
