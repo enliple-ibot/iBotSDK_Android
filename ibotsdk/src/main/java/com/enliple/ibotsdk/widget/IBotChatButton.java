@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat;
 import com.enliple.ibotsdk.ActivityPresenter;
 import com.enliple.ibotsdk.R;
 
-public class ChatBotButton  extends FrameLayout {
+public class IBotChatButton extends FrameLayout {
     private static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0; // button은 화면 우측에 위치하고 왼쪽으로 expanding area가 노출됨
     private static final int TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON = 1; // button은 화면 좌측에 위치하고 오른쪾으로 expanding area가 노출됨
     private static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
@@ -50,24 +50,24 @@ public class ChatBotButton  extends FrameLayout {
     private int size = DEFAULT_SIZE;
     private int barTextSize = DEFAULT_TEXT_SIZE;
 
-    public ChatBotButton(Context context) {
+    public IBotChatButton(Context context) {
         super(context);
         initViews(context);
     }
 
-    public ChatBotButton(Context context, AttributeSet attrs) {
+    public IBotChatButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         initViews(context);
         getAttrs(attrs);
     }
 
-    public ChatBotButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public IBotChatButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initViews(context);
         getAttrs(attrs, defStyleAttr);
     }
 
-    public ChatBotButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public IBotChatButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initViews(context);
         getAttrs(attrs, defStyleRes);
@@ -93,27 +93,27 @@ public class ChatBotButton  extends FrameLayout {
     }
 
     private void getAttrs(AttributeSet attrs) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ChatBotButton);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.IBotChatButton);
         setTypeArray(typedArray);
     }
 
 
     private void getAttrs(AttributeSet attrs, int defStyle) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ChatBotButton, defStyle, 0);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.IBotChatButton, defStyle, 0);
         setTypeArray(typedArray);
     }
 
 
     private void setTypeArray(TypedArray typedArray) {
-        type = typedArray.getInt(R.styleable.ChatBotButton_type, TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
-        bBgImage = typedArray.getResourceId(R.styleable.ChatBotButton_buttonBg, R.drawable.ibot_icon);
-        cBtnImage = typedArray.getResourceId(R.styleable.ChatBotButton_buttonCloseIcon, R.drawable.ibot_ico_close);
-        barBg = typedArray.getColor(R.styleable.ChatBotButton_barBg, ContextCompat.getColor(context, R.color.bar_background));
-        barText = typedArray.getResourceId(R.styleable.ChatBotButton_barText, R.string.hello_ibot);
-        barTextColor = typedArray.getColor(R.styleable.ChatBotButton_barTextColor, ContextCompat.getColor(context, R.color.ibot_text_color));
+        type = typedArray.getInt(R.styleable.IBotChatButton_type, TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
+        bBgImage = typedArray.getResourceId(R.styleable.IBotChatButton_buttonBg, R.drawable.ibot_icon);
+        cBtnImage = typedArray.getResourceId(R.styleable.IBotChatButton_buttonCloseIcon, R.drawable.ibot_ico_close);
+        barBg = typedArray.getColor(R.styleable.IBotChatButton_barBg, ContextCompat.getColor(context, R.color.bar_background));
+        barText = typedArray.getResourceId(R.styleable.IBotChatButton_barText, R.string.hello_ibot);
+        barTextColor = typedArray.getColor(R.styleable.IBotChatButton_barTextColor, ContextCompat.getColor(context, R.color.ibot_text_color));
 //        expandable = typedArray.getBoolean(R.styleable.ChatBotButton_expandable, true);
-        size = typedArray.getInt(R.styleable.ChatBotButton_size, DEFAULT_SIZE);
-        barTextSize = typedArray.getInt(R.styleable.ChatBotButton_barTextSize, DEFAULT_TEXT_SIZE);
+        size = typedArray.getInt(R.styleable.IBotChatButton_size, DEFAULT_SIZE);
+        barTextSize = typedArray.getInt(R.styleable.IBotChatButton_barTextSize, DEFAULT_TEXT_SIZE);
         size = dpToPx(size);
         float radius = size / 2;
         if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {

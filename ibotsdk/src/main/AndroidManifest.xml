@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <activity
-            android:name=".activity.ChatBotActivity"
+            android:name=".activity.IBotSDKChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ChatBotButton">
+    <declare-styleable name="IBotChatButton">
         <attr name="size" format="integer" />
         <attr name="buttonBg" format="reference" />
         <attr name="barBg" format="reference" />
