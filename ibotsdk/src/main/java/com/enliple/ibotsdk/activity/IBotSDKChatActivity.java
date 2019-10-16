@@ -11,7 +11,7 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.enliple.ibotsdk.R;
-import com.enliple.ibotsdk.network.URL;
+import com.enliple.ibotsdk.network.IBotURL;
 
 public class IBotSDKChatActivity extends AppCompatActivity {
 
@@ -23,7 +23,7 @@ public class IBotSDKChatActivity extends AppCompatActivity {
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatbot);
+        setContentView(R.layout.activity_ibot_chat);
 
         Intent intent = getIntent();
         mallId = intent.getStringExtra(INTENT_KEY_MALL_ID);
@@ -42,6 +42,6 @@ public class IBotSDKChatActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if ( mallId != null && !TextUtils.isEmpty(mallId) )
-            webView.loadUrl(URL.CHAT_URL + mallId);
+            webView.loadUrl(IBotURL.CHAT_URL + mallId);
     }
 }

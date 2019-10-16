@@ -77,7 +77,7 @@ public class IBotChatButton extends FrameLayout {
         this.context = context;
         String infService = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater li = (LayoutInflater) getContext().getSystemService(infService);
-        View v = li.inflate(R.layout.chatbot_button, this, false);
+        View v = li.inflate(R.layout.ibot_chat_button, this, false);
         addView(v);
 
         frame = findViewById(R.id.frame);
@@ -108,7 +108,7 @@ public class IBotChatButton extends FrameLayout {
         type = typedArray.getInt(R.styleable.IBotChatButton_type, TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
         bBgImage = typedArray.getResourceId(R.styleable.IBotChatButton_buttonBg, R.drawable.ibot_icon);
         cBtnImage = typedArray.getResourceId(R.styleable.IBotChatButton_buttonCloseIcon, R.drawable.ibot_ico_close);
-        barBg = typedArray.getColor(R.styleable.IBotChatButton_barBg, ContextCompat.getColor(context, R.color.bar_background));
+        barBg = typedArray.getColor(R.styleable.IBotChatButton_barBg, ContextCompat.getColor(context, R.color.ibot_bar_background));
         barText = typedArray.getResourceId(R.styleable.IBotChatButton_barText, R.string.hello_ibot);
         barTextColor = typedArray.getColor(R.styleable.IBotChatButton_barTextColor, ContextCompat.getColor(context, R.color.ibot_text_color));
 //        expandable = typedArray.getBoolean(R.styleable.ChatBotButton_expandable, true);

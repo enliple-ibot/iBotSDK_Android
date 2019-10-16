@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 public class IBotBaseRetrofit {
 
     protected static Object retrofit(Context context, Class<?> className) {
-        String host = URL.HOST;
+        String host = IBotURL.HOST;
 
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         builder.readTimeout(20, TimeUnit.SECONDS);

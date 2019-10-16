@@ -20,7 +20,7 @@ public class IBotNetworkTask extends IBotCommonApi {
     }
 
     public void getChatUrl(String mallId, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
-        url = URL.HOST;
+        url = IBotURL.HOST;
         this.defaultObjectCallbackListener = defaultObjectCallbackListener;
 
         modeIndex = MODE_GET;

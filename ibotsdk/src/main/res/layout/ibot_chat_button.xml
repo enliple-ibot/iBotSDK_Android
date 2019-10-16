@@ -12,8 +12,7 @@
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-            android:background="@drawable/bar_bg">
+            android:visibility="invisible">
 
 
             <RelativeLayout
