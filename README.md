@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:buttonBg="@drawable/ibot_icon"
-        app:barBg="@color/bar_background"
+        app:barBg="@color/ibot_bar_background"
         app:barText="@string/hello_ibot"
         app:barTextColor="@color/ibot_text_color"
         app:barTextSize="15"
