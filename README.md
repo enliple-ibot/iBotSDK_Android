@@ -1,5 +1,5 @@
 # iBotSDK_Android
-
+---
 ### IBotChatButton Customizing
 <img src="https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png" width="520" height="195">
 
@@ -19,3 +19,18 @@
 ![Screenshot_left_300](https://user-images.githubusercontent.com/56538133/66888821-0169b980-f01b-11e9-81f8-dd9817720f9d.jpg)
 ######     - 2 : 버튼만 존재하며 확장영역이 나타나지 않음
 ![showbot_icon_50](https://user-images.githubusercontent.com/56538133/66888822-0169b980-f01b-11e9-8501-9540a4fc1408.png)
+
+### Example ( .xml)
+```xml
+    <com.enliple.ibotsdk.widget.IBotChatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:buttonBg="@drawable/ibot_icon"
+        app:barBg="@color/bar_background"
+        app:barText="@string/hello_ibot"
+        app:barTextColor="@color/ibot_text_color"
+        app:barTextSize="15"
+        app:buttonCloseIcon="@drawable/ibot_ico_close"
+        app:size="60"
+        app:type="0"/>
+---
