@@ -338,7 +338,7 @@ public class ChatBotButton  extends FrameLayout {
             if  ( id == R.id.buttonClose ) {
                 closeBar();
             } else if ( id == R.id.layer ) {
-                ActivityPresenter.shared.presentChatbotActivity(getContext(), "https://bot.istore.camp/index.html?origin=http%3A%2F%2Fm.superbeeracing.com&referer=http%3A%2F%2Fm.superbeeracing.com%2F&mallId=8");
+                ActivityPresenter.shared.presentChatbotActivity(getContext(), "8");
             }
         }
     };
