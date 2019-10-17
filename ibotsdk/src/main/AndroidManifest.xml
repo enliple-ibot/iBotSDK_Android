@@ -6,7 +6,8 @@
     <application
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.IBotSDKChatActivity"/>
+            android:name=".activity.IBotSDKChatActivity"
+            android:theme="@style/IBotTheme"/>
     </application>
 
 </manifest>
