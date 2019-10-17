@@ -14,7 +14,7 @@ import com.enliple.ibotsdk.widget.IBotChatButton;
 
 public class IBotSDK {
     public static IBotSDK instance = new IBotSDK();
-    public static String apiKey;
+    public static String apiKey = "";
 
     public void initSDK(String mallId) {
         this.apiKey = mallId;

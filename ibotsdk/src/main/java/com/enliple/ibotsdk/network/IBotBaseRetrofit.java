@@ -1,6 +1,7 @@
 package com.enliple.ibotsdk.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +17,7 @@ public class IBotBaseRetrofit {
 
     protected static Object retrofit(Context context, Class<?> className) {
         String host = IBotURL.HOST;
-
+        Log.e("TAG", "host :: " + host);
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
         builder.readTimeout(20, TimeUnit.SECONDS);
         builder.connectTimeout(20, TimeUnit.SECONDS);
