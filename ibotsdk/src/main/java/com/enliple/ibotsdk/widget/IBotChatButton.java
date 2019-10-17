@@ -21,15 +21,16 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.enliple.ibotsdk.ActivityPresenter;
+import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.R;
+import com.enliple.ibotsdk.model.IBotButtonAttribute;
 
 public class IBotChatButton extends FrameLayout {
-    private static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0; // button은 화면 우측에 위치하고 왼쪽으로 expanding area가 노출됨
-    private static final int TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON = 1; // button은 화면 좌측에 위치하고 오른쪾으로 expanding area가 노출됨
-    private static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
-    private static final int DEFAULT_SIZE = 60; // default ChatBotButton size
-    private static final int DEFAULT_TEXT_SIZE = 15; // expanding area에 있는 문구의 default size
+    public static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0; // button은 화면 우측에 위치하고 왼쪽으로 expanding area가 노출됨
+    public static final int TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON = 1; // button은 화면 좌측에 위치하고 오른쪾으로 expanding area가 노출됨
+    public static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
+    public static final int DEFAULT_SIZE = 60; // default ChatBotButton size
+    public static final int DEFAULT_TEXT_SIZE = 15; // expanding area에 있는 문구의 default size
 
     private Context context;
 
@@ -50,9 +51,10 @@ public class IBotChatButton extends FrameLayout {
     private int size = DEFAULT_SIZE;
     private int barTextSize = DEFAULT_TEXT_SIZE;
 
-    public IBotChatButton(Context context) {
+    public IBotChatButton(Context context, IBotButtonAttribute attr) {
         super(context);
         initViews(context);
+        setAttribute(attr);
     }
 
     public IBotChatButton(Context context, AttributeSet attrs) {
@@ -103,6 +105,146 @@ public class IBotChatButton extends FrameLayout {
         setTypeArray(typedArray);
     }
 
+
+    private void setAttribute(IBotButtonAttribute attr) {
+        type = TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
+        bBgImage = R.drawable.ibot_icon;
+        cBtnImage = R.drawable.ibot_ico_close;
+        barBg = ContextCompat.getColor(context, R.color.ibot_bar_background);
+        barText = R.string.hello_ibot;
+        barTextColor = ContextCompat.getColor(context, R.color.ibot_text_color);
+        size = DEFAULT_SIZE;
+        barTextSize = DEFAULT_TEXT_SIZE;
+
+        if ( attr != null ) {
+            type = attr.getType();
+            if (attr.getButtonBg() != -1 ) bBgImage = attr.getButtonBg();
+            if ( attr.getCloseImage() != -1 ) cBtnImage = attr.getCloseImage();
+            if ( attr.getBarBgColor() != -1 ) barBg = ContextCompat.getColor(context, attr.getBarBgColor());
+            if ( attr.getBarText() != -1 ) barText = attr.getBarText();
+            if ( attr.getBarTextColor() != -1 ) barTextColor = ContextCompat.getColor(context, attr.getBarTextColor());
+            size = attr.getSize();
+            barTextSize = attr.getBarTextSize();
+        }
+
+        size = dpToPx(size);
+        float radius = size / 2;
+
+        if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
+            GradientDrawable buttonBarBackground = new GradientDrawable();
+            buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
+            buttonBarBackground.setCornerRadii(new float[] {radius, radius, 0f, 0f, 0f, 0f, radius, radius});
+            buttonBarBackground.setColor(barBg);
+
+            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            buttonParams.width = size;
+            buttonParams.height = size;
+            buttonBg.setLayoutParams(buttonParams);
+
+            RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
+            rootParams.height = size;
+            rootParams.setMargins(0, 0, (int)radius, 0);
+            rootParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            root.setLayoutParams(rootParams);
+
+            FrameLayout.LayoutParams layerParams = (FrameLayout.LayoutParams)layer.getLayoutParams();
+            layerParams.height = size;
+            layerParams.gravity = Gravity.RIGHT;
+            layer.setLayoutParams(layerParams);
+
+            ViewGroup.LayoutParams closeIconParam = buttonCloseImage.getLayoutParams();
+            closeIconParam.width = size / 5;
+            closeIconParam.height = size / 5;
+            buttonCloseImage.setLayoutParams(closeIconParam);
+
+            RelativeLayout.LayoutParams buttonCloseParams = (RelativeLayout.LayoutParams)buttonClose.getLayoutParams();
+            buttonCloseParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            buttonClose.setLayoutParams(buttonCloseParams);
+
+            RelativeLayout.LayoutParams explainParams = (RelativeLayout.LayoutParams)textExplain.getLayoutParams();
+            explainParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            explainParams.addRule(RelativeLayout.RIGHT_OF, R.id.buttonClose);
+            textExplain.setLayoutParams(explainParams);
+
+            root.setBackground(buttonBarBackground);
+            buttonBg.setBackgroundResource(bBgImage);
+            buttonCloseImage.setBackgroundResource(cBtnImage);
+
+            textExplain.setPadding(0, 0, (int)radius + 20, 0);
+            textExplain.setText(barText);
+            textExplain.setTextColor(barTextColor);
+            textExplain.setTextSize(barTextSize);
+        } else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON ) {
+            GradientDrawable buttonBarBackground = new GradientDrawable();
+            buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
+            buttonBarBackground.setCornerRadii(new float[] {0f, 0f, radius, radius, radius, radius, 0f, 0f});
+            buttonBarBackground.setColor(barBg);
+
+            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            buttonParams.width = size;
+            buttonParams.height = size;
+            buttonBg.setLayoutParams(buttonParams);
+
+            RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
+            rootParams.height = size;
+            rootParams.setMargins((int)radius, 0, 0, 0);
+            rootParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            root.setLayoutParams(rootParams);
+
+            FrameLayout.LayoutParams layerParams = (FrameLayout.LayoutParams)layer.getLayoutParams();
+            layerParams.height = size;
+            layerParams.gravity = Gravity.LEFT;
+            layer.setLayoutParams(layerParams);
+
+            ViewGroup.LayoutParams closeIconParam = buttonCloseImage.getLayoutParams();
+            closeIconParam.width = size / 5;
+            closeIconParam.height = size / 5;
+            buttonCloseImage.setLayoutParams(closeIconParam);
+
+            RelativeLayout.LayoutParams buttonCloseParams = (RelativeLayout.LayoutParams)buttonClose.getLayoutParams();
+            buttonCloseParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            buttonClose.setLayoutParams(buttonCloseParams);
+
+            RelativeLayout.LayoutParams explainParams = (RelativeLayout.LayoutParams)textExplain.getLayoutParams();
+            explainParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            explainParams.addRule(RelativeLayout.LEFT_OF, R.id.buttonClose);
+            explainParams.addRule(RelativeLayout.CENTER_VERTICAL);
+            textExplain.setLayoutParams(explainParams);
+
+            root.setBackground(buttonBarBackground);
+            buttonBg.setBackgroundResource(bBgImage);
+            buttonCloseImage.setBackgroundResource(cBtnImage);
+
+            textExplain.setPadding((int)radius + 20, 0, 0, 0);
+            textExplain.setText(barText);
+            textExplain.setTextColor(barTextColor);
+            textExplain.setTextSize(barTextSize);
+        } else {
+            ViewGroup.LayoutParams frameParams = frame.getLayoutParams();
+            frameParams.width = size;
+            frameParams.height = size;
+            frame.setLayoutParams(frameParams);
+
+            ViewGroup.LayoutParams layerParams = layer.getLayoutParams();
+            layerParams.width = size;
+            layerParams.height = size;
+            layer.setLayoutParams(layerParams);
+
+            root.setVisibility(View.GONE);
+
+            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+            buttonParams.width = size;
+            buttonParams.height = size;
+            buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            buttonBg.setLayoutParams(buttonParams);
+
+            buttonBg.setBackgroundResource(bBgImage);
+        }
+
+        barAnimation();
+    }
 
     private void setTypeArray(TypedArray typedArray) {
         type = typedArray.getInt(R.styleable.IBotChatButton_type, TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
@@ -338,7 +480,7 @@ public class IBotChatButton extends FrameLayout {
             if  ( id == R.id.buttonClose ) {
                 closeBar();
             } else if ( id == R.id.layer ) {
-                ActivityPresenter.shared.presentChatbotActivity(getContext(), "8");
+                IBotSDK.instance.goIBotChat(getContext());
             }
         }
     };

@@ -39,5 +39,12 @@
         android:layout_marginTop="60dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <LinearLayout
+        android:padding="17dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLayer"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

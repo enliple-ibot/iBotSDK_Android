@@ -15,7 +15,7 @@ import com.enliple.ibotsdk.network.IBotURL;
 
 public class IBotSDKChatActivity extends AppCompatActivity {
 
-    public static final String INTENT_KEY_MALL_ID = "INTENT_KEY_MALL_ID";
+    public static final String INTENT_API_KEY = "INTENT_API_KEY";
 
     private WebView webView = null;
 
@@ -26,7 +26,7 @@ public class IBotSDKChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ibot_chat);
 
         Intent intent = getIntent();
-        mallId = intent.getStringExtra(INTENT_KEY_MALL_ID);
+        mallId = intent.getStringExtra(INTENT_API_KEY);
 
         webView = findViewById(R.id.webView);
 

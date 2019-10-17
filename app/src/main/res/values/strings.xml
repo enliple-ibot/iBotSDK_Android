@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">IBotProject</string>
+    <string name="bot_msg">Hello!! This is IBot</string>
 </resources>
