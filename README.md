@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer);
     }
 }
-
+```
 
 ### IBotChatButton Customizing
 <img src="https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png" width="520" height="195">
