@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 #### Button Setting
+```java
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout buttonLayer;
