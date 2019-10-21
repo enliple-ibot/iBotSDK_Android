@@ -1,7 +1,5 @@
 package com.enliple.ibotproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -9,7 +7,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.model.IBotButtonAttribute;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IBotSDK.instance.initSDK("8");
+        IBotSDK.instance.initSDK("205");
         webView = findViewById(R.id.webView);
         actionButton = findViewById(R.id.actionButton);
         buttonLayer = findViewById(R.id.buttonLayer);

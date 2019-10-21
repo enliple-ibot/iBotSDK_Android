@@ -3,7 +3,6 @@ package com.enliple.ibotsdk.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -44,7 +43,7 @@ public class IBotSDKChatActivity extends AppCompatActivity {
                     if ( url.equals(loadUrl) ) {
                         if ( !url.equals(finishedUrl) ) {
                             finishedUrl = url;
-                            webView.loadUrl("javascript:window.innerHeight");
+                            webView.loadUrl("javascript:window.close()");
                         }
                     }
                 }
@@ -59,7 +58,7 @@ public class IBotSDKChatActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if ( mallId != null && !TextUtils.isEmpty(mallId) ) {
-            loadUrl = IBotURL.CHAT_URL + mallId;
+            loadUrl = IBotURL.CHAT_URL_TEST + mallId;
             webView.loadUrl(loadUrl);
         }
 
