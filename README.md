@@ -1,7 +1,23 @@
 # iBotSDK_Android
 ---
-Init
+### Init and setButton
+#### init
 ```java
+public class MainActivity extends AppCompatActivity {
+
+    private LinearLayout buttonLayer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        LinearLayout buttonLayer = findViewById(R.id.buttonLayer);
+
+        IBotSDK.instance.initSDK("발급받은 api key");
+    }
+}
+```
+#### Button Setting
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout buttonLayer;
@@ -16,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
         IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer);
     }
 }
-```
----
----
+
+
 ### IBotChatButton Customizing
 <img src="https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png" width="520" height="195">
 
@@ -39,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
    - 2 : 버튼만 존재하며 확장영역이 나타나지 않음   
    ![showbot_icon_50](https://user-images.githubusercontent.com/56538133/66888822-0169b980-f01b-11e9-8501-9540a4fc1408.png)
    
-**Example ( .xml)**
+**Example**
 ```xml
     <com.enliple.ibotsdk.widget.IBotChatButton
         android:layout_width="wrap_content"
