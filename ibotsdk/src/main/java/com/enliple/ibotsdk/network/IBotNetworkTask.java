@@ -21,6 +21,17 @@ public class IBotNetworkTask extends IBotCommonApi {
         this.context = context;
     }
 
+    public void init(String mallId, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
+        url = IBotURL.INIT;
+        this.defaultObjectCallbackListener = defaultObjectCallbackListener;
+
+        param = new HashMap<>();
+        param.put("mallId", mallId);
+
+        modeIndex = MODE_GET;
+        execute();
+    }
+
     public void isAlivePackage(String mallId, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
         url = IBotURL.IS_ALIVE_PACKAGE;
         this.defaultObjectCallbackListener = defaultObjectCallbackListener;

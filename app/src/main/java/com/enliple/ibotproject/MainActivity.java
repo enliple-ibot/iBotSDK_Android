@@ -26,10 +26,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IBotSDK.instance.initSDK("205");
         webView = findViewById(R.id.webView);
         actionButton = findViewById(R.id.actionButton);
         buttonLayer = findViewById(R.id.buttonLayer);
+
+        IBotSDK.instance.initSDK("발급받은 api key");
+        IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer);
 
         WebChromeClient chromeClient = new WebChromeClient();
         WebViewClient webViewClient = new WebViewClient();
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 IBotSDK.instance.goIBotChat(MainActivity.this);
             }
         });
+        /**
         if ( useButtonShow ) {
             IBotButtonAttribute attr = new IBotButtonAttribute();
             attr.setButtonBg(R.drawable.showbot_icon);
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             attr.setSize(60);
             attr.setCloseImage(R.drawable.ico_close);
             attr.setType(IBotChatButton.TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON);
-            IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer, attr);
+//            IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer, attr);
         } else {
             IBotButtonAttribute attr = new IBotButtonAttribute();
             attr.setButtonBg(R.drawable.showbot_icon);
@@ -72,5 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             buttonLayer.addView(chatButton);
         }
+
+         **/
     }
 }

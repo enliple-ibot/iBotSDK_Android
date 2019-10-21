@@ -1,5 +1,24 @@
 # iBotSDK_Android
 ---
+Init
+```java
+public class MainActivity extends AppCompatActivity {
+
+    private LinearLayout buttonLayer;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        LinearLayout buttonLayer = findViewById(R.id.buttonLayer);
+
+        IBotSDK.instance.initSDK("발급받은 api key");
+        IBotSDK.instance.showIBotButton(MainActivity.this, true, buttonLayer);
+    }
+}
+```
+---
+---
 ### IBotChatButton Customizing
 <img src="https://user-images.githubusercontent.com/56538133/66885715-1b51cf00-f010-11e9-94c5-4bf7954b02bd.png" width="520" height="195">
 

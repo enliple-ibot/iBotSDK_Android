@@ -37,7 +37,13 @@ public class IBotSDK {
             }
         });
     }
-    public void showIBotButton(Context context, boolean isShow, ViewGroup view, IBotButtonAttribute attr) {
+    public void showIBotButton(Context context, boolean isShow, ViewGroup view) {
+        if  (isShow) {
+            IBotChatButton button = new IBotChatButton(context, new IBotButtonAttribute());
+            view.addView(button);
+        }
+    }
+    private void showIBotButton(Context context, boolean isShow, ViewGroup view, IBotButtonAttribute attr) {
         if ( isShow ) {
             if ( attr == null )
                 attr = new IBotButtonAttribute();
