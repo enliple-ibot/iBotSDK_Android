@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.model.IBotButtonAttribute;
@@ -21,11 +20,12 @@ public class IBotSDK {
     }
     public void goIBotChat(final Context context) {
         Log.e("TAG", "packageName :: " + context.getPackageName());
-        new IBotNetworkTask(context).getChatUrl(apiKey, new IBotNetworkTask.OnDefaultObjectCallbackListener() {
+        new IBotNetworkTask(context).isAlivePackage(apiKey, new IBotNetworkTask.OnDefaultObjectCallbackListener() {
             @Override
             public void onResponse(boolean result, Object obj) {
-                Log.e("TAG", "result :: " + result);
-                if ( result ) {
+                Log.e("TAG", "result :: " + result + "obj.toString() :: " + obj.toString());
+                if ( result && "true".equals(obj.toString()) ) {
+                    System.out.println("result true api key :: " + apiKey);
                     if ( apiKey != null && !TextUtils.isEmpty(apiKey) ) {
                         Intent intent = new Intent( context, IBotSDKChatActivity.class );
                         intent.putExtra( IBotSDKChatActivity.INTENT_API_KEY, apiKey );
@@ -44,5 +44,9 @@ public class IBotSDK {
             IBotChatButton button = new IBotChatButton(context, attr);
             view.addView(button);
         }
+    }
+
+    public String getSDKVersion() {
+        return BuildConfig.IBOT_SDK_VERSION;
     }
 }

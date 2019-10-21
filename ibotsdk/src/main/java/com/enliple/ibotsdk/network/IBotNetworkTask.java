@@ -4,6 +4,8 @@ import android.content.Context;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class IBotNetworkTask extends IBotCommonApi {
     private static final int MODE_GET = -1;
     private static final int MODE_POST = -2;
@@ -17,6 +19,17 @@ public class IBotNetworkTask extends IBotCommonApi {
 
     public IBotNetworkTask(Context context) {
         this.context = context;
+    }
+
+    public void isAlivePackage(String mallId, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
+        url = IBotURL.IS_ALIVE_PACKAGE;
+        this.defaultObjectCallbackListener = defaultObjectCallbackListener;
+
+        param = new HashMap<>();
+        param.put("mallId", mallId);
+
+        modeIndex = MODE_GET;
+        execute();
     }
 
     public void getChatUrl(String mallId, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {

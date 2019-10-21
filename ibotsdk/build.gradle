@@ -13,6 +13,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField "String", "IBOT_SDK_VERSION", "\"$ibot_sdk_version\""
     }
 
     buildTypes {
@@ -51,7 +53,7 @@ publish {
     userOrg = 'enliple-ibot'
     groupId = 'com.enliple'
     artifactId = 'ibotsdk'
-    publishVersion = '0.0.4'
+    publishVersion = "$ibot_sdk_version"
     desc = 'IBot SDK for Android'
     licences = ['MIT']
     repository = "https://github.com/enliple-ibot/iBotSDK_Android.git"
