@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.enliple.ibotsdk" >
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <!-- "CLEARTEXT communication to XXXX not permitted by network security policy" 발생으로  android:usesCleartextTraffic="true" 추가 -->
     <application
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".activity.IBotSDKChatActivity"
             android:theme="@style/IBotTheme"/>
+
     </application>
 
 </manifest>

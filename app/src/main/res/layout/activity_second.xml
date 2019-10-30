@@ -8,20 +8,6 @@
     android:background="@drawable/ic_launcher_background"
     tools:context=".MainActivity">
 
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/actionButton"
-        android:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="60dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <LinearLayout
         android:padding="17dp"
@@ -31,4 +17,9 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"/>
 
+    <!--    <com.enliple.ibotsdk.widget.IBotChatButton-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="17dp"-->
+    <!--        android:layout_alignParentBottom="true"/>-->
 </RelativeLayout>

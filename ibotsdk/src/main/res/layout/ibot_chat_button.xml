@@ -6,7 +6,8 @@
     <RelativeLayout
         android:id="@+id/layer"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/root"
@@ -26,8 +27,7 @@
                     android:id="@+id/buttonCloseImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/ibot_ico_close"/>
+                    android:layout_centerInParent="true"/>
 
 
             </RelativeLayout>
@@ -41,18 +41,15 @@
                 android:textSize="14sp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="@string/hello_ibot"
-                android:textColor="@color/ibot_text_color"/>
+                android:text="@string/hello_ibot"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/buttonBg"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ibot_icon">
+            android:layout_height="50dp"/>
 
-        </RelativeLayout>
 
     </RelativeLayout>
 
