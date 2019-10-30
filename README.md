@@ -2,11 +2,13 @@
 ---
 ### build.gradle
  - 내 build.gradle에 implementation 'androidx.appcompat:appcompat 가 정의되어 있을 경우
+
    implementation ('com.enliple:ibotsdk:sdk-version') {
        exclude group: 'androidx.appcompat',  module: 'appcompat'
    }
 
  - 내 build.gradle에  implementation 'androidx.appcompat:appcompat가 정의되어 있지 않을 경우
+ 
    implementation 'com.enliple:ibotsdk:sdk-version'
 ### Init and setButton
 ```java
