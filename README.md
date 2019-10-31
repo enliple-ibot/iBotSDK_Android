@@ -8,7 +8,7 @@ use Gradle:
       implementation 'com.enliple:0.0.13'
    }
 ```
-or useMaven:
+or use Maven:
 
 ```xml
 <dependency>
