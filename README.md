@@ -22,9 +22,6 @@ or use Maven:
 ### Init and setButton
 ```java
 public class MainActivity extends AppCompatActivity {
-
-    private LinearLayout buttonLayer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
