@@ -2,7 +2,7 @@
 
 buildscript {
     ext.bintray_version = '0.9.1'
-    ext.ibot_sdk_version = "0.0.8"
+    ext.ibot_sdk_version = "0.0.12"
     repositories {
         google()
         jcenter()

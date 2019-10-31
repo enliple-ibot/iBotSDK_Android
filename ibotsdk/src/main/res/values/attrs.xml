@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="IBotTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/ibot_text_color</item>
-        <item name="colorPrimaryDark">@color/ibot_text_color</item>
-        <item name="colorAccent">@color/ibot_text_color</item>
+<!--    <style name="IBotTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/ibot_text_color</item>-->
+<!--        <item name="colorPrimaryDark">@color/ibot_text_color</item>-->
+<!--        <item name="colorAccent">@color/ibot_text_color</item>-->
 
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--    </style>-->
 
 <!--    <declare-styleable name="IBotChatButton">-->
 <!--        <attr name="size" format="integer" />-->

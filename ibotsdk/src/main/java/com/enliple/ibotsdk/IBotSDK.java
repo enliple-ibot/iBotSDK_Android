@@ -11,8 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.common.AppPreferences;
 import com.enliple.ibotsdk.common.IBotDownloadImage;
@@ -36,6 +34,7 @@ public class IBotSDK {
     private boolean isCloseDownloaded = false;
     private String iconPath, closePath, bgColor, textColor, textStr;
     private long regDate = 0;
+    private IBotChatButton button;
     public IBotSDK(Context context, String apiKey) {
         initSDK(context, apiKey);
     }
@@ -59,16 +58,16 @@ public class IBotSDK {
                                 if ( savedDate < regDate ) { // 이미지 등록일이 최신이면
                                     saveNewResources(iconFile, closeFile);
                                 } else { // 등록일이 최신이 아니면
-                                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(IBotChatButton.IBOT_IMAGE_DOWNLOAD_FINISHED));
+                                    button.onReceived();
                                 }
                             }
                         } else {
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(IBotChatButton.IBOT_IMAGE_DOWNLOAD_FINISHED));
+                            button.onReceived();
                         }
                     } catch (Exception e) {
                         System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
                         e.printStackTrace();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(IBotChatButton.IBOT_IMAGE_DOWNLOAD_FINISHED));
+                        button.onReceived();
                     }
                 } else
                     System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
@@ -136,7 +135,9 @@ public class IBotSDK {
 
     public void showIBotButton(final Context context, boolean isShow, int type, ViewGroup view) {
         if  (isShow) {
-            IBotChatButton button = new IBotChatButton(context, apiKey, type, this);
+            if ( view != null )
+                view.removeAllViews();
+            button = new IBotChatButton(context, apiKey, type, this);
             view.addView(button);
         }
     }
@@ -190,7 +191,7 @@ public class IBotSDK {
             if ( type ) isIconDownloaded = true; else isCloseDownloaded = true;
             if ( isIconDownloaded && isCloseDownloaded ) {
                 AppPreferences.setLong(context, AppPreferences.IBOT_REG_DATE + "_" + apiKey, regDate);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(IBotChatButton.IBOT_IMAGE_DOWNLOAD_FINISHED));
+                button.onReceived();
             }
         }
     }

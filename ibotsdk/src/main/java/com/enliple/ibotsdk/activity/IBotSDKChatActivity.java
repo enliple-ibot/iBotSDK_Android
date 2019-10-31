@@ -1,5 +1,6 @@
 package com.enliple.ibotsdk.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,15 +14,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.R;
 import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 
 import org.json.JSONObject;
 
-public class IBotSDKChatActivity extends AppCompatActivity {
+public class IBotSDKChatActivity extends Activity {
     public static final String IBOT_JAVASCRIPT_NAME = "iBotAppHandler";
     public static final String INTENT_API_URL = "INTENT_API_URL";
     private static final int SEND_COOKIE = 0;

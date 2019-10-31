@@ -23,7 +23,7 @@
                 android:paddingRight="15dp"
                 android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/buttonCloseImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
 
             </RelativeLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/textExplain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
 
         </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/buttonBg"
             android:layout_width="50dp"
             android:layout_height="50dp"/>

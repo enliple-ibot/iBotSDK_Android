@@ -1,15 +1,24 @@
 # iBotSDK_Android
 ---
-### build.gradle
- - 내 build.gradle에 implementation 'androidx.appcompat:appcompat 가 정의되어 있을 경우
+### Download
+use Gradle:
 
-   implementation ('com.enliple:ibotsdk:sdk-version') {
-       exclude group: 'androidx.appcompat',  module: 'appcompat'
+```xml
+   dependencies {
+      implementation 'com.enliple:0.0.12'
    }
+```
+or useMaven:
 
- - 내 build.gradle에  implementation 'androidx.appcompat:appcompat가 정의되어 있지 않을 경우
- 
-   implementation 'com.enliple:ibotsdk:sdk-version'
+```xml
+<dependency>
+  <groupId>com.enliple</groupId>
+  <artifactId>ibotsdk</artifactId>
+  <version>0.0.12</version>
+  <type>pom</type>
+</dependency>
+```
+
 ### Init and setButton
 ```java
 public class MainActivity extends AppCompatActivity {

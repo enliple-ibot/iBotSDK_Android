@@ -1,5 +1,6 @@
 package com.enliple.ibotproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,13 +10,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.widget.IBotChatButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private WebView webView = null;
     private FloatingActionButton actionButton = null;
