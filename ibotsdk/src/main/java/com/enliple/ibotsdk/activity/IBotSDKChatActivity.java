@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.R;
+import com.enliple.ibotsdk.common.IBotKey;
 import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 
 import org.json.JSONObject;
@@ -39,7 +40,7 @@ public class IBotSDKChatActivity extends Activity {
                 if ( cookies != null ) {
                     String[] arrCookie = cookies.split(";");
                     for ( String arg : arrCookie ) {
-                        if ( arg.contains("uid") ) {
+                        if ( arg.contains(IBotKey.UID) ) {
                             String[] value = arg.split("=");
                             uid = value[1];
                             if ( TextUtils.isEmpty(uid) ) {
@@ -49,14 +50,14 @@ public class IBotSDKChatActivity extends Activity {
                             } else {
                                 try {
                                     JSONObject object = new JSONObject();
-                                    object.put("uid", uid);
+                                    object.put(IBotKey.UID, uid);
                                     JSONObject dataObject = new JSONObject();
-                                    dataObject.put("uuid", IBotSDK.getUUID(getApplicationContext()));
-                                    dataObject.put("os_version", IBotSDK.getOSVersion());
-                                    dataObject.put("os_type", "Android");
-                                    dataObject.put("sdk_version", IBotSDK.getSDKVersion());
-                                    dataObject.put("device", IBotSDK.getModel());
-                                    object.put("data", dataObject);
+                                    dataObject.put(IBotKey.UUID, IBotSDK.getUUID(getApplicationContext()));
+                                    dataObject.put(IBotKey.OS_VERSION, IBotSDK.getOSVersion());
+                                    dataObject.put(IBotKey.OS_TYPE, "Android");
+                                    dataObject.put(IBotKey.SDK_VERSION, IBotSDK.getSDKVersion());
+                                    dataObject.put(IBotKey.DEVICE, IBotSDK.getModel());
+                                    object.put(IBotKey.DATA, dataObject);
 
                                     new IBotNetworkAsyncTask().sendInfos(object.toString(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
                                         @Override
@@ -65,9 +66,10 @@ public class IBotSDKChatActivity extends Activity {
                                                 try {
                                                     JSONObject object = new JSONObject(obj.toString());
                                                     boolean result = object.optBoolean("result");
-                                                    if ( !result ) {
+                                                    if ( !result )
                                                         System.out.println("get info response false");
-                                                    }
+                                                    else
+                                                        System.out.println("get info result " + obj.toString());
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
                                                     System.out.println("get info failed");

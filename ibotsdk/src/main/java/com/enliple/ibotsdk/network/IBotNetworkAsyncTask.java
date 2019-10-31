@@ -1,5 +1,7 @@
 package com.enliple.ibotsdk.network;
 
+import com.enliple.ibotsdk.common.IBotKey;
+
 import java.util.HashMap;
 
 
@@ -11,12 +13,16 @@ public class IBotNetworkAsyncTask extends IBotNetworkApi {
     private OnDefaultObjectCallbackListener defaultObjectCallbackListener;
     private int modeIndex;
 
-    public void init(String apiKey, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
+    public void init(String apiKey, String uuid, String sdkVersion, String osVersion, String appKind, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
         url = IBotURL.INIT;
         this.defaultObjectCallbackListener = defaultObjectCallbackListener;
 
         param = new HashMap<>();
-        param.put("apiKey", apiKey);
+        param.put(IBotKey.API_KEY, apiKey);
+        param.put(IBotKey.UUID, uuid);
+        param.put(IBotKey.SDK_VERSION, sdkVersion);
+        param.put(IBotKey.OS_VERSION, osVersion);
+        param.put(IBotKey.APP_KIND, appKind);
 
         modeIndex = MODE_GET;
         execute();
@@ -27,7 +33,7 @@ public class IBotNetworkAsyncTask extends IBotNetworkApi {
         this.defaultObjectCallbackListener = defaultObjectCallbackListener;
 
         param = new HashMap<>();
-        param.put("apiKey", apiKey);
+        param.put(IBotKey.API_KEY, apiKey);
 
         modeIndex = MODE_GET;
         execute();

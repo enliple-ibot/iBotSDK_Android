@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
@@ -41,7 +40,7 @@ public class IBotSDK {
     private void initSDK(final Context context, final String apiKey) {
         this.context = context;
         this.apiKey = apiKey;
-        new IBotNetworkAsyncTask().init(apiKey, new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
+        new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
             @Override
             public void onResponse(boolean result, Object obj) {
                 if ( result ) {
@@ -49,21 +48,19 @@ public class IBotSDK {
                         JSONObject jsonObject = new JSONObject(obj.toString());
                         url = jsonObject.optString("url");
                         if ( !TextUtils.isEmpty(iconPath) || !TextUtils.isEmpty(closePath) ) { // 이미지 경로가 모두 있으면
-                            File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + ".png");
-                            File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + ".png");
+                            File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
+                            File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
                             long savedDate = AppPreferences.getLong(context, AppPreferences.IBOT_REG_DATE + "_" + apiKey);
                             if ( savedDate == -1 ) { // 저장한 날짜가 없으면 다운로드
                                 saveNewResources(iconFile, closeFile);
                             } else { // 저장한 날짜가 있으면
-                                if ( savedDate < regDate ) { // 이미지 등록일이 최신이면
+                                if ( savedDate < regDate ) // 이미지 등록일이 최신이면
                                     saveNewResources(iconFile, closeFile);
-                                } else { // 등록일이 최신이 아니면
+                                else // 등록일이 최신이 아니면
                                     button.onReceived();
-                                }
                             }
-                        } else {
+                        } else
                             button.onReceived();
-                        }
                     } catch (Exception e) {
                         System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
                         e.printStackTrace();
@@ -85,15 +82,11 @@ public class IBotSDK {
                 @Override
                 public void onResponse(boolean result, Object obj) {
                     if ( result ) {
-                        Log.e("TAG", "obj :: " + obj.toString());
                         if ( apiKey != null && !TextUtils.isEmpty(apiKey) && url != null && !TextUtils.isEmpty(url) ) {
                             try {
-//                                JSONObject jsonObject = (JSONObject) obj;
                                 JSONObject jsonObject = new JSONObject(obj.toString());
                                 boolean rt = jsonObject.optBoolean("result", false);
-                                Log.e("TAG", "rt :: " + rt);
                                 if ( rt ) {
-                                    Log.e("TAG", "url :: " + url);
                                     if ( isWebViewOpen ) {
                                         Intent intent = new Intent( context, IBotSDKChatActivity.class );
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

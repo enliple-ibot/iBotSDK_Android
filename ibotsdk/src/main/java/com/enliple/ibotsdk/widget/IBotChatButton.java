@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +35,6 @@ import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 import java.io.File;
 
 public class IBotChatButton extends FrameLayout implements OnCompleteListener {
-    public static final String IBOT_IMAGE_DOWNLOAD_FINISHED = "IBOT_IMAGE_DOWNLOAD_FINISHED";
-    public static final String IBOT_BUTTON_ALIVE = "IBOT_BUTTON_ALIVE";
     public static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0; // button은 화면 우측에 위치하고 왼쪽으로 expanding area가 노출됨
     public static final int TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON = 1; // button은 화면 좌측에 위치하고 오른쪾으로 expanding area가 노출됨
     public static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
@@ -66,6 +63,7 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
     private float radius;
     private String barText;
     private String apiKey = null;
+
     public IBotChatButton(Context context, String apiKey, int type, IBotSDK sdk) {
         super(context);
         this.sdk = sdk;
@@ -81,11 +79,6 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
     public IBotChatButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
-//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//    public IBotChatButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        super(context, attrs, defStyleAttr, defStyleRes);
-//    }
 
     private void initViews(Context context) {
         this.context = context;
@@ -109,27 +102,9 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
         cBtnImage = context.getResources().getDrawable(R.drawable.ibot_close_white_ico);
         barBg = context.getResources().getColor(R.color.ibot_bar_background);
         barTextColor = context.getResources().getColor( R.color.ibot_text_color);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//
-//            cBtnImage = context.getResources().getDrawable(R.drawable.ibot_close_white_ico, context.getTheme());
-//            barBg = context.getResources().getColor(R.color.ibot_bar_background);
-//        } else {
-//            bBgImage = context.getResources().getDrawable(R.drawable.ibot_icon);
-//            cBtnImage = context.getResources().getDrawable(R.drawable.ibot_close_white_ico);
-//        }
-
-//        barBg = ContextCompat.getColor(context, R.color.ibot_bar_background);
-//        barTextColor = ContextCompat.getColor(context, R.color.ibot_text_color);
-//        bBgImage = ContextCompat.getDrawable(context, R.drawable.ibot_icon);
-//        cBtnImage = ContextCompat.getDrawable(context, R.drawable.ibot_close_white_ico);
-//        barBg = ContextCompat.getColor(context, R.color.ibot_bar_background);
-//        barTextColor = ContextCompat.getColor(context, R.color.ibot_text_color);
         barText = context.getResources().getString(R.string.hello_ibot);
-
-        size = DEFAULT_SIZE;
         barTextSize = DEFAULT_TEXT_SIZE;
-
-        size = dpToPx(size);
+        size = dpToPx(DEFAULT_SIZE);
         radius = size / 2;
 
         File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON);
@@ -145,19 +120,16 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
         }
 
         String bgColor = AppPreferences.getString(context, AppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
-        if ( !TextUtils.isEmpty(bgColor) ) {
+        if ( !TextUtils.isEmpty(bgColor) )
             barBg = Color.parseColor(bgColor);
-        }
 
         String textColor = AppPreferences.getString(context, AppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
-        if ( !TextUtils.isEmpty(textColor) ) {
+        if ( !TextUtils.isEmpty(textColor) )
             barTextColor = Color.parseColor(textColor);
-        }
 
         String text = AppPreferences.getString(context, AppPreferences.IBOT_TEXT + "_" + apiKey);
-        if ( !TextUtils.isEmpty(text) ) {
+        if ( !TextUtils.isEmpty(text) )
             barText = text;
-        }
 
         if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
             buttonBarBackground = new GradientDrawable();
@@ -282,11 +254,10 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             buttonBg.setLayoutParams(buttonParams);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 buttonBg.setBackground(bBgImage);
-            } else {
+            else
                 buttonBg.setBackgroundDrawable(bBgImage);
-            }
         }
         barAnimation();
     }
@@ -301,7 +272,6 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
                 @Override
                 public void run() {
                     root.setVisibility(View.VISIBLE);
-
                     ValueAnimator mAnimator = slideAnimator(0, root.getWidth());
                     mAnimator.addListener(new Animator.AnimatorListener() {
                         @Override
@@ -387,9 +357,8 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             if  ( id == R.id.buttonClose )
                 closeBar();
             else if ( id == R.id.layer ) {
-                if ( sdk != null ) {
+                if ( sdk != null )
                     sdk.goIBotChat();
-                }
             }
         }
     };
@@ -411,46 +380,43 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
 
     @Override
     public void onReceived() {
-        Log.e("TAG", "onReceived");
-        File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + ".png");
-        File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + ".png");
+        File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
+        File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
+
         if ( iconFile.exists() ) {
             Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
             bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 buttonBg.setBackground(bBgImage);
-            } else {
+            else
                 buttonBg.setBackgroundDrawable(bBgImage);
-            }
         }
 
         if ( closeFile.exists() ) {
             Bitmap closeBitmap = BitmapFactory.decodeFile(closeFile.getAbsolutePath());
             cBtnImage = new BitmapDrawable(context.getResources(), closeBitmap);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 buttonCloseImage.setBackground(cBtnImage);
-            } else {
+            else
                 buttonCloseImage.setBackgroundDrawable(cBtnImage);
-            }
         }
 
         String bgColor = AppPreferences.getString(context, AppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
-        if ( !TextUtils.isEmpty(bgColor) ) {
+        if ( !TextUtils.isEmpty(bgColor) )
             barBg = Color.parseColor(bgColor);
-        }
+
         buttonBarBackground = new GradientDrawable();
         buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
-        if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
+        if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON )
             buttonBarBackground.setCornerRadii(new float[] {radius, radius, 0f, 0f, 0f, 0f, radius, radius});
-        } else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON ) {
+        else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON )
             buttonBarBackground.setCornerRadii(new float[] {0f, 0f, radius, radius, radius, radius, 0f, 0f});
-        }
         buttonBarBackground.setColor(barBg);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
             root.setBackground(buttonBarBackground);
-        } else {
+        else
             root.setBackgroundDrawable(buttonBarBackground);
-        }
 
         String textColor = AppPreferences.getString(context, AppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
         if ( !TextUtils.isEmpty(textColor) ) {

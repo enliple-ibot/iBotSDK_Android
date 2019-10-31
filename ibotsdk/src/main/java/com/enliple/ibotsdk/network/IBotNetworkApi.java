@@ -48,9 +48,8 @@ public class IBotNetworkApi {
     public URL makeGetUrl() {
         if ( param != null && param.size() > 0 ) {
             Uri.Builder builder = Uri.parse(url).buildUpon();
-            for ( String key : param.keySet() ) {
+            for ( String key : param.keySet() )
                 builder.appendQueryParameter(key, param.get(key));
-            }
             Uri builtUri = builder.build();
 
             URL lUrl = null;
@@ -66,29 +65,21 @@ public class IBotNetworkApi {
     }
 
     class GetTask extends AsyncTask<URL, Void, Void> {
-
         @Override
         protected Void doInBackground(URL... urls) {
             try {
                 HttpURLConnection con = (HttpURLConnection) urls[0].openConnection();
                 con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
                 con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
-
                 con.setRequestMethod("GET");
-
-                //URLConnection에 대한 doOutput 필드값을 지정된 값으로 설정한다. URL 연결은 입출력에 사용될 수 있다.
-                // URL 연결을 출력용으로 사용하려는 경우 DoOutput 플래그를 true로 설정하고, 그렇지 않은 경우는 false로 설정해야 한다. 기본값은 false이다.
-
                 con.setDoOutput(false);
 
                 StringBuilder sb = new StringBuilder();
                 if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader(con.getInputStream(), "utf-8"));
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
                     String line;
-                    while ((line = br.readLine()) != null) {
+                    while ((line = br.readLine()) != null)
                         sb.append(line);
-                    }
                     br.close();
                     System.out.println("result ::" + sb.toString());
                     if ( callbackListener != null )
@@ -108,13 +99,12 @@ public class IBotNetworkApi {
     }
 
     class PostTask extends AsyncTask<URL, Void, Void> {
-
         @Override
         protected Void doInBackground(URL... urls) {
-
             try{
                 HttpURLConnection con = (HttpURLConnection) urls[0].openConnection();
-
+                con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+                con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Content-Type", "application/json");
                 con.setUseCaches(false);
@@ -125,18 +115,14 @@ public class IBotNetworkApi {
                 os.flush();
                 os.close();
 
+                StringBuilder sb = new StringBuilder();
                 if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
                     String line;
-                    String page = "";
-
-                    while ((line = reader.readLine()) != null){
-                        page += line;
-                    }
-                    System.out.println("result ::" + page);
+                    while ((line = br.readLine()) != null)
+                        sb.append(line);
                     if ( callbackListener != null )
-                        callbackListener.onResponse(true, page);
+                        callbackListener.onResponse(true, sb.toString());
                 } else {
                     System.out.println(con.getResponseMessage());
                     if ( callbackListener != null )

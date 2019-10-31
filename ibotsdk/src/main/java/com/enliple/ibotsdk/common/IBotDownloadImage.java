@@ -14,8 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class IBotDownloadImage {
+    public static final String IMAGE_FILE_EXTENSION = ".png";
     public static final String IMAGE_ICON = "ibot_icon";
     public static final String IMAGE_CLOSE = "ibot_close";
+
 
     public static Bitmap getBitmapFromURL(String imageUrl) {
         try {
@@ -46,9 +48,9 @@ public class IBotDownloadImage {
     }
 
     public static boolean SaveBitmapToFile(Context context, String apiKey, Bitmap bitmap, boolean isIcon) {
-        String fileName = IMAGE_ICON + apiKey + ".png";
+        String fileName = IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION;
         if ( !isIcon )
-            fileName = IMAGE_CLOSE + apiKey + ".png";
+            fileName = IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION;
         String strPath = context.getFilesDir().getAbsolutePath() + File.separator + fileName;
         File file = new File(strPath);
         OutputStream out = null;
@@ -66,19 +68,6 @@ public class IBotDownloadImage {
                 e.printStackTrace();
                 return false;
             }
-        }
-    }
-
-    public static boolean isImageExist(Context context, String apiKey, boolean isIcon) {
-        String fileName = IMAGE_ICON + apiKey + ".png";
-        if ( !isIcon )
-            fileName = IMAGE_CLOSE + apiKey + ".png";
-        String strPath = context.getFilesDir().getAbsolutePath() + File.separator + fileName;
-        File file = new File(strPath);
-        if ( file != null ) {
-            return file.exists();
-        } else {
-            return false;
         }
     }
 }
