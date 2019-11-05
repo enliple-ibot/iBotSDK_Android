@@ -13,7 +13,7 @@ public class IBotNetworkAsyncTask extends IBotNetworkApi {
     private OnDefaultObjectCallbackListener defaultObjectCallbackListener;
     private int modeIndex;
 
-    public void init(String apiKey, String uuid, String sdkVersion, String osVersion, String appKind, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
+    public void init(String apiKey, String uuid, String sdkVersion, String osVersion, String packageName, OnDefaultObjectCallbackListener defaultObjectCallbackListener) {
         url = IBotURL.INIT;
         this.defaultObjectCallbackListener = defaultObjectCallbackListener;
 
@@ -22,7 +22,7 @@ public class IBotNetworkAsyncTask extends IBotNetworkApi {
         param.put(IBotKey.UUID, uuid);
         param.put(IBotKey.SDK_VERSION, sdkVersion);
         param.put(IBotKey.OS_VERSION, osVersion);
-        param.put(IBotKey.APP_KIND, appKind);
+        param.put(IBotKey.PACKAGE_NAME, packageName);
 
         modeIndex = MODE_GET;
         execute();

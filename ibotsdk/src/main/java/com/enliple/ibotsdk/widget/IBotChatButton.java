@@ -26,15 +26,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.enliple.ibotsdk.IBotSDK;
-import com.enliple.ibotsdk.OnCompleteListener;
 import com.enliple.ibotsdk.R;
-import com.enliple.ibotsdk.common.AppPreferences;
+import com.enliple.ibotsdk.common.IBotAppPreferences;
 import com.enliple.ibotsdk.common.IBotDownloadImage;
 import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 
 import java.io.File;
 
-public class IBotChatButton extends FrameLayout implements OnCompleteListener {
+public class IBotChatButton extends FrameLayout {
     public static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0; // button은 화면 우측에 위치하고 왼쪽으로 expanding area가 노출됨
     public static final int TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON = 1; // button은 화면 좌측에 위치하고 오른쪾으로 expanding area가 노출됨
     public static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
@@ -109,6 +108,7 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
 
         File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON);
         File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE);
+
         if ( iconFile.exists() ) {
             Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
             bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
@@ -119,17 +119,22 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             cBtnImage = new BitmapDrawable(context.getResources(), closeBitmap);
         }
 
-        String bgColor = AppPreferences.getString(context, AppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
+        String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
         if ( !TextUtils.isEmpty(bgColor) )
             barBg = Color.parseColor(bgColor);
 
-        String textColor = AppPreferences.getString(context, AppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
+        String textColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
         if ( !TextUtils.isEmpty(textColor) )
             barTextColor = Color.parseColor(textColor);
 
-        String text = AppPreferences.getString(context, AppPreferences.IBOT_TEXT + "_" + apiKey);
+        String text = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey);
         if ( !TextUtils.isEmpty(text) )
             barText = text;
+        Bitmap bitmapBgImage = ((BitmapDrawable) bBgImage).getBitmap();
+        int bBgImageWidth = bitmapBgImage.getWidth();
+        int bBgImageHeight = bitmapBgImage.getHeight();
+        int bgImageWidth = (bBgImageWidth * DEFAULT_SIZE) / bBgImageHeight;
+        bgImageWidth = dpToPx(bgImageWidth);
 
         if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
             buttonBarBackground = new GradientDrawable();
@@ -139,13 +144,13 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
 
             RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
             buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            buttonParams.width = size;
+            buttonParams.width = bgImageWidth;
             buttonParams.height = size;
             buttonBg.setLayoutParams(buttonParams);
 
             RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
             rootParams.height = size;
-            rootParams.setMargins(0, 0, (int)radius, 0);
+            rootParams.setMargins(0, 0, (int)(bgImageWidth / 2), 0);
             rootParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             root.setLayoutParams(rootParams);
 
@@ -153,11 +158,6 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             layerParams.height = size;
             layerParams.gravity = Gravity.RIGHT;
             layer.setLayoutParams(layerParams);
-
-            ViewGroup.LayoutParams closeIconParam = buttonCloseImage.getLayoutParams();
-            closeIconParam.width = size / 5;
-            closeIconParam.height = size / 5;
-            buttonCloseImage.setLayoutParams(closeIconParam);
 
             RelativeLayout.LayoutParams buttonCloseParams = (RelativeLayout.LayoutParams)buttonClose.getLayoutParams();
             buttonCloseParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -178,8 +178,7 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
                 buttonCloseImage.setBackgroundDrawable(cBtnImage);
             }
 
-
-            textExplain.setPadding(0, 0, (int)radius + 20, 0);
+            textExplain.setPadding(0, 0, (int)(bgImageWidth / 2) + 20, 0);
             textExplain.setText(barText);
             textExplain.setTextColor(barTextColor);
             textExplain.setTextSize(barTextSize);
@@ -191,13 +190,13 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
 
             RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
             buttonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            buttonParams.width = size;
+            buttonParams.width = bgImageWidth;
             buttonParams.height = size;
             buttonBg.setLayoutParams(buttonParams);
 
             RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
             rootParams.height = size;
-            rootParams.setMargins((int)radius, 0, 0, 0);
+            rootParams.setMargins((int)(bgImageWidth / 2), 0, 0, 0);
             rootParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             root.setLayoutParams(rootParams);
 
@@ -205,11 +204,6 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             layerParams.height = size;
             layerParams.gravity = Gravity.LEFT;
             layer.setLayoutParams(layerParams);
-
-            ViewGroup.LayoutParams closeIconParam = buttonCloseImage.getLayoutParams();
-            closeIconParam.width = size / 5;
-            closeIconParam.height = size / 5;
-            buttonCloseImage.setLayoutParams(closeIconParam);
 
             RelativeLayout.LayoutParams buttonCloseParams = (RelativeLayout.LayoutParams)buttonClose.getLayoutParams();
             buttonCloseParams.addRule(RelativeLayout.ALIGN_PARENT_END);
@@ -231,25 +225,25 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
                 buttonCloseImage.setBackgroundDrawable(cBtnImage);
             }
 
-            textExplain.setPadding((int)radius + 20, 0, 0, 0);
+            textExplain.setPadding((int)(bgImageWidth / 2) + 20, 0, 0, 0);
             textExplain.setText(barText);
             textExplain.setTextColor(barTextColor);
             textExplain.setTextSize(barTextSize);
         } else {
             ViewGroup.LayoutParams frameParams = frame.getLayoutParams();
-            frameParams.width = size;
+            frameParams.width = bgImageWidth;
             frameParams.height = size;
             frame.setLayoutParams(frameParams);
 
             ViewGroup.LayoutParams layerParams = layer.getLayoutParams();
-            layerParams.width = size;
+            layerParams.width = bgImageWidth;
             layerParams.height = size;
             layer.setLayoutParams(layerParams);
 
             root.setVisibility(View.GONE);
 
             RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-            buttonParams.width = size;
+            buttonParams.width = bgImageWidth;
             buttonParams.height = size;
             buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             buttonBg.setLayoutParams(buttonParams);
@@ -259,7 +253,6 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
             else
                 buttonBg.setBackgroundDrawable(bBgImage);
         }
-        barAnimation();
     }
 
     public void setApiKey(String apiKey) {
@@ -370,7 +363,7 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
     @Override
     public void dispatchWindowFocusChanged(boolean hasFocus) {
         super.dispatchWindowFocusChanged(hasFocus);
-        if( apiKey != null && hasFocus ) {
+        if( apiKey != null && hasFocus && getVisibility() == View.VISIBLE ) {
             new IBotNetworkAsyncTask().isAlivePackage(apiKey, new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
                 @Override
                 public void onResponse(boolean result, Object obj) {}
@@ -378,58 +371,115 @@ public class IBotChatButton extends FrameLayout implements OnCompleteListener {
         }
     }
 
-    @Override
     public void onReceived() {
-        File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
-        File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
+        try {
+            File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
+            File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
 
-        if ( iconFile.exists() ) {
-            Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
-            bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
+            if ( iconFile.exists() ) {
+                Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
+                bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
+
+                Bitmap bitmapBgImage = ((BitmapDrawable) bBgImage).getBitmap();
+                int bBgImageWidth = bitmapBgImage.getWidth();
+                int bBgImageHeight = bitmapBgImage.getHeight();
+                int bgImageWidth = (bBgImageWidth * DEFAULT_SIZE) / bBgImageHeight;
+                bgImageWidth = dpToPx(bgImageWidth);
+
+                buttonBarBackground = new GradientDrawable();
+                buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
+
+                if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
+                    RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+                    buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    buttonParams.width = bgImageWidth;
+                    buttonParams.height = size;
+                    buttonBg.setLayoutParams(buttonParams);
+
+                    RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
+                    rootParams.height = size;
+                    rootParams.setMargins(0, 0, (int)(bgImageWidth / 2), 0);
+                    rootParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    root.setLayoutParams(rootParams);
+
+                    textExplain.setPadding(0, 0, (int)(bgImageWidth / 2) + 20, 0);
+                    buttonBarBackground.setCornerRadii(new float[] {radius, radius, 0f, 0f, 0f, 0f, radius, radius});
+                } else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON ) {
+                    RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+                    buttonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    buttonParams.width = bgImageWidth;
+                    buttonParams.height = size;
+                    buttonBg.setLayoutParams(buttonParams);
+
+                    RelativeLayout.LayoutParams rootParams = (RelativeLayout.LayoutParams)root.getLayoutParams();
+                    rootParams.height = size;
+                    rootParams.setMargins((int)(bgImageWidth / 2), 0, 0, 0);
+                    rootParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    root.setLayoutParams(rootParams);
+
+                    textExplain.setPadding((int)(bgImageWidth / 2) + 20, 0, 0, 0);
+                    buttonBarBackground.setCornerRadii(new float[] {0f, 0f, radius, radius, radius, radius, 0f, 0f});
+                } else {
+                    ViewGroup.LayoutParams frameParams = frame.getLayoutParams();
+                    frameParams.width = bgImageWidth;
+                    frameParams.height = size;
+                    frame.setLayoutParams(frameParams);
+
+                    ViewGroup.LayoutParams layerParams = layer.getLayoutParams();
+                    layerParams.width = bgImageWidth;
+                    layerParams.height = size;
+                    layer.setLayoutParams(layerParams);
+
+                    root.setVisibility(View.GONE);
+
+                    RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
+                    buttonParams.width = bgImageWidth;
+                    buttonParams.height = size;
+                    buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    buttonBg.setLayoutParams(buttonParams);
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    buttonBg.setBackground(bBgImage);
+                else
+                    buttonBg.setBackgroundDrawable(bBgImage);
+            }
+
+            if ( closeFile.exists() ) {
+                Bitmap closeBitmap = BitmapFactory.decodeFile(closeFile.getAbsolutePath());
+                cBtnImage = new BitmapDrawable(context.getResources(), closeBitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    buttonCloseImage.setBackground(cBtnImage);
+                else
+                    buttonCloseImage.setBackgroundDrawable(cBtnImage);
+            }
+
+            String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
+            if ( !TextUtils.isEmpty(bgColor) )
+                barBg = Color.parseColor(bgColor);
+            buttonBarBackground.setColor(barBg);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                buttonBg.setBackground(bBgImage);
+                root.setBackground(buttonBarBackground);
             else
-                buttonBg.setBackgroundDrawable(bBgImage);
-        }
+                root.setBackgroundDrawable(buttonBarBackground);
 
-        if ( closeFile.exists() ) {
-            Bitmap closeBitmap = BitmapFactory.decodeFile(closeFile.getAbsolutePath());
-            cBtnImage = new BitmapDrawable(context.getResources(), closeBitmap);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                buttonCloseImage.setBackground(cBtnImage);
-            else
-                buttonCloseImage.setBackgroundDrawable(cBtnImage);
-        }
+            String textColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
+            if ( !TextUtils.isEmpty(textColor) ) {
+                barTextColor = Color.parseColor(textColor);
+                textExplain.setTextColor(barTextColor);
+            }
 
-        String bgColor = AppPreferences.getString(context, AppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
-        if ( !TextUtils.isEmpty(bgColor) )
-            barBg = Color.parseColor(bgColor);
-
-        buttonBarBackground = new GradientDrawable();
-        buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
-        if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON )
-            buttonBarBackground.setCornerRadii(new float[] {radius, radius, 0f, 0f, 0f, 0f, radius, radius});
-        else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON )
-            buttonBarBackground.setCornerRadii(new float[] {0f, 0f, radius, radius, radius, radius, 0f, 0f});
-        buttonBarBackground.setColor(barBg);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            root.setBackground(buttonBarBackground);
-        else
-            root.setBackgroundDrawable(buttonBarBackground);
-
-        String textColor = AppPreferences.getString(context, AppPreferences.IBOT_TEXT_COLOR + "_" + apiKey);
-        if ( !TextUtils.isEmpty(textColor) ) {
-            barTextColor = Color.parseColor(textColor);
-            textExplain.setTextColor(barTextColor);
-        }
-
-        String text = AppPreferences.getString(context, AppPreferences.IBOT_TEXT + "_" + apiKey);
-        if ( !TextUtils.isEmpty(text) ) {
-            barText = text;
-            textExplain.setText(barText);
+            String text = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey);
+            if ( !TextUtils.isEmpty(text) ) {
+                barText = text;
+                textExplain.setText(barText);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         layer.setVisibility(View.VISIBLE);
+        barAnimation();
     }
 }

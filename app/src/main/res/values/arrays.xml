@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string-array name="how_to_open">
+        <item>WebView</item>
+        <item>Browser</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON</item>
+        <item>TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON</item>
+        <item>TYPE_NON_EXPANDABLE_BUTTON</item>
+    </string-array>
+
+    <string-array name="orientation">
+        <item>DEFAULT</item>
+        <item>ORIENTATION_PORTRAIT</item>
+        <item>ORIENTATION_LANDSCAPE</item>
+    </string-array>
+</resources>

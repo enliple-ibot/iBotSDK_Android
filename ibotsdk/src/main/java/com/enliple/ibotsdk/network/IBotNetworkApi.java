@@ -2,6 +2,7 @@ package com.enliple.ibotsdk.network;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -58,6 +59,7 @@ public class IBotNetworkApi {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
+            Log.e("TAG", "get request :: " + builtUri.toString());
             return lUrl;
         } else {
             return null;
@@ -69,8 +71,8 @@ public class IBotNetworkApi {
         protected Void doInBackground(URL... urls) {
             try {
                 HttpURLConnection con = (HttpURLConnection) urls[0].openConnection();
-                con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
-                con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+                con.setConnectTimeout(5000);
+                con.setReadTimeout(5000);
                 con.setRequestMethod("GET");
                 con.setDoOutput(false);
 
@@ -81,7 +83,6 @@ public class IBotNetworkApi {
                     while ((line = br.readLine()) != null)
                         sb.append(line);
                     br.close();
-                    System.out.println("result ::" + sb.toString());
                     if ( callbackListener != null )
                         callbackListener.onResponse(true, sb.toString());
                 } else {
@@ -103,8 +104,8 @@ public class IBotNetworkApi {
         protected Void doInBackground(URL... urls) {
             try{
                 HttpURLConnection con = (HttpURLConnection) urls[0].openConnection();
-                con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
-                con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+                con.setConnectTimeout(5000);
+                con.setReadTimeout(5000);
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Content-Type", "application/json");
                 con.setUseCaches(false);
@@ -140,6 +141,4 @@ public class IBotNetworkApi {
     public interface CallbackListener {
         public void onResponse(boolean result, Object obj);
     }
-
-
 }

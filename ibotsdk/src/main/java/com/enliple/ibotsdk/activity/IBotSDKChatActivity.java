@@ -2,6 +2,8 @@ package com.enliple.ibotsdk.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +26,7 @@ import org.json.JSONObject;
 public class IBotSDKChatActivity extends Activity {
     public static final String IBOT_JAVASCRIPT_NAME = "iBotAppHandler";
     public static final String INTENT_API_URL = "INTENT_API_URL";
+    public static final String INTENT_ORIENTATION = "INTENT_ORIENTATION";
     private static final int SEND_COOKIE = 0;
     private WebView webView = null;
 
@@ -98,6 +101,10 @@ public class IBotSDKChatActivity extends Activity {
 
         Intent intent = getIntent();
         loadUrl = intent.getStringExtra(INTENT_API_URL);
+        int orientation = intent.getIntExtra(INTENT_ORIENTATION, -100);
+        if ( orientation != -100 ) {
+            setRequestedOrientation(orientation);
+        }
 
         webView = findViewById(R.id.webView);
 
@@ -107,7 +114,6 @@ public class IBotSDKChatActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 if ( url != null ) {
-                    //채팅창 내에서 외부 링크등을 통해 클릭 발생할 경우 webview 내 다른 페이지로 이동하는 것을 막기 위해
                     if ( url.startsWith("http://") || url.startsWith("https://") )
                         webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     else if ( url.startsWith("tel:") )
@@ -140,6 +146,11 @@ public class IBotSDKChatActivity extends Activity {
 
         if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
             webView.loadUrl(loadUrl);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
     }
 
     public void onBackPressed() {

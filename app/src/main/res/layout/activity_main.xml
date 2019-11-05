@@ -1,34 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_launcher_background"
+    android:padding="17dp"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <WebView
-        android:id="@+id/webView"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginBottom="15dp"
+        android:text="@string/sample"
+        android:textColor="@android:color/black"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/title_open"
+        android:textColor="@color/dark_gray"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/openSpinner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="50dp"
+        android:layout_marginBottom="15dp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/actionButton"
-        android:visibility="visible"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="15dp"
+        android:background="#cccccc"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="60dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:textSize="16sp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/title_type"
+        android:textColor="@color/dark_gray"/>
 
-    <LinearLayout
-        android:padding="17dp"
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/typeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="15dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="15dp"
+        android:background="#cccccc"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonLayer"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"/>
+        android:textSize="16sp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/title_orientation"
+        android:textColor="@color/dark_gray"/>
 
-</RelativeLayout>
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/orientationSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="15dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="15dp"
+        android:background="#cccccc"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnShow"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/show_button"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <RelativeLayout
+        android:id="@+id/btnLayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

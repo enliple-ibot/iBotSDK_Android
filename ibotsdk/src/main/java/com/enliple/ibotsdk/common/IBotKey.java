@@ -5,7 +5,7 @@ public class IBotKey {
     public static final String UUID = "uuid";
     public static final String SDK_VERSION = "sdkVersion";
     public static final String OS_VERSION = "osVersion";
-    public static final String APP_KIND = "appKind";
+    public static final String PACKAGE_NAME = "packageName";
     public static final String UID = "uid";
     public static final String OS_TYPE = "os_type";
     public static final String DEVICE = "device";

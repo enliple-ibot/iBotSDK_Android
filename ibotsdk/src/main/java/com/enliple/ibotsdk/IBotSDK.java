@@ -2,16 +2,18 @@ package com.enliple.ibotsdk;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
-import com.enliple.ibotsdk.common.AppPreferences;
+import com.enliple.ibotsdk.common.IBotAppPreferences;
 import com.enliple.ibotsdk.common.IBotDownloadImage;
 import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 import com.enliple.ibotsdk.widget.IBotChatButton;
@@ -23,23 +25,37 @@ import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 public class IBotSDK {
+    private static final int SET_RESOURCE = 1;
     private static final String TYPE_ICON = "0";
     private static final String TYPE_CLOSE = "1";
-    public static boolean isGoWebView = true;
+
     private Context context;
     private String apiKey = "";
     private String url = "";
+    private boolean isGoWebView = true;
     private boolean isIconDownloaded = false;
     private boolean isCloseDownloaded = false;
     private String iconPath, closePath, bgColor, textColor, textStr;
     private long regDate = 0;
+    private int orientation = -100;
+
     private IBotChatButton button;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if ( msg.what == SET_RESOURCE ) {
+                if ( button != null )
+                    button.onReceived();
+            }
+        }
+    };
     public IBotSDK(Context context, String apiKey) {
-        initSDK(context, apiKey);
-    }
-    private void initSDK(final Context context, final String apiKey) {
         this.context = context;
         this.apiKey = apiKey;
+    }
+
+    private void initSDK(final Context context, final String apiKey) {
+
         new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
             @Override
             public void onResponse(boolean result, Object obj) {
@@ -47,36 +63,39 @@ public class IBotSDK {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
                         url = jsonObject.optString("url");
-                        if ( !TextUtils.isEmpty(iconPath) || !TextUtils.isEmpty(closePath) ) { // 이미지 경로가 모두 있으면
+                        Log.e("TAG", "url :: " + url);
+//                        iconPath = "https://cdn.onlinewebfonts.com/svg/img_199295.png";
+//                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
+//                        iconPath = "https://bot.istore.camp/chatImages/common/showbot_icon.png";
+//                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
+                        if ( !TextUtils.isEmpty(iconPath) || !TextUtils.isEmpty(closePath) ) {
                             File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
                             File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
-                            long savedDate = AppPreferences.getLong(context, AppPreferences.IBOT_REG_DATE + "_" + apiKey);
+                            long savedDate = IBotAppPreferences.getLong(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
                             if ( savedDate == -1 ) { // 저장한 날짜가 없으면 다운로드
                                 saveNewResources(iconFile, closeFile);
                             } else { // 저장한 날짜가 있으면
                                 if ( savedDate < regDate ) // 이미지 등록일이 최신이면
                                     saveNewResources(iconFile, closeFile);
                                 else // 등록일이 최신이 아니면
-                                    button.onReceived();
+                                    handler.sendEmptyMessage(SET_RESOURCE);
                             }
                         } else
-                            button.onReceived();
+                            handler.sendEmptyMessage(SET_RESOURCE);
                     } catch (Exception e) {
                         System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
                         e.printStackTrace();
-                        button.onReceived();
                     }
-                } else
-                    System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
+                }
             }
         });
     }
 
     public void goIBotChat() {
-        goIBotChat(this.context, isGoWebView);
+        goIBotChat(this.context);
     }
 
-    private void goIBotChat(final Context context, final boolean isWebViewOpen) {
+    private void goIBotChat(final Context context) {
         if ( !TextUtils.isEmpty(url) ) {
             new IBotNetworkAsyncTask().isAlivePackage(apiKey, new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
                 @Override
@@ -87,10 +106,12 @@ public class IBotSDK {
                                 JSONObject jsonObject = new JSONObject(obj.toString());
                                 boolean rt = jsonObject.optBoolean("result", false);
                                 if ( rt ) {
-                                    if ( isWebViewOpen ) {
+                                    if ( isGoWebView ) {
                                         Intent intent = new Intent( context, IBotSDKChatActivity.class );
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         intent.putExtra( IBotSDKChatActivity.INTENT_API_URL, url );
+                                        if ( orientation != -100 )
+                                            intent.putExtra(IBotSDKChatActivity.INTENT_ORIENTATION, orientation);
                                         context.startActivity(intent);
                                     } else {
                                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -102,10 +123,12 @@ public class IBotSDK {
                                 e.printStackTrace();
                                 if ( obj != null ) {
                                     if ("true".equals(obj.toString())) {
-                                        if ( isWebViewOpen ) {
+                                        if ( isGoWebView ) {
                                             Intent intent = new Intent( context, IBotSDKChatActivity.class );
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                             intent.putExtra( IBotSDKChatActivity.INTENT_API_URL, url );
+                                            if ( orientation != -100 )
+                                                intent.putExtra(IBotSDKChatActivity.INTENT_ORIENTATION, orientation);
                                             context.startActivity(intent);
                                         } else {
                                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -126,14 +149,21 @@ public class IBotSDK {
         isGoWebView = false;
     }
 
+    public void setChatActivityOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
     public void showIBotButton(final Context context, boolean isShow, int type, ViewGroup view) {
-        if  (isShow) {
+        if  (isShow && !TextUtils.isEmpty(apiKey)) {
             if ( view != null )
                 view.removeAllViews();
             button = new IBotChatButton(context, apiKey, type, this);
             view.addView(button);
+
+            initSDK(context, apiKey);
         }
     }
+
     public static String getSDKVersion() {
         return BuildConfig.IBOT_SDK_VERSION;
     }
@@ -159,10 +189,8 @@ public class IBotSDK {
         return uuidStr;
     }
 
-    public class DownloadAsyncTask extends AsyncTask<String,Void, Boolean> {
-        public boolean result;
+    public class DownloadImageAsyncTask extends AsyncTask<String, Void, Boolean> {
         public boolean type = false;
-        public String path;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -171,11 +199,10 @@ public class IBotSDK {
         @Override
         protected Boolean doInBackground(String... params) {
             String sType = params[0];
-            path = params[1];
+            String path = params[1];
             if (TYPE_ICON.equals(sType) ) type = true; else type = false;
 
-            Bitmap bitmap = IBotDownloadImage.getBitmapFromURL(path);
-            return IBotDownloadImage.SaveBitmapToFile(context, apiKey, bitmap, type);
+            return IBotDownloadImage.DownloadImage(context, path, apiKey, type);
         }
 
         @Override
@@ -183,9 +210,10 @@ public class IBotSDK {
             super.onPostExecute(s);
             if ( type ) isIconDownloaded = true; else isCloseDownloaded = true;
             if ( isIconDownloaded && isCloseDownloaded ) {
-                AppPreferences.setLong(context, AppPreferences.IBOT_REG_DATE + "_" + apiKey, regDate);
-                button.onReceived();
-            }
+                IBotAppPreferences.setLong(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey, regDate);
+                handler.sendEmptyMessage(SET_RESOURCE);
+            } else
+                new DownloadImageAsyncTask().execute(TYPE_CLOSE, closePath);
         }
     }
 
@@ -194,10 +222,9 @@ public class IBotSDK {
             iconFile.delete();
         if ( closeFile.exists() )
             closeFile.delete();
-        new DownloadAsyncTask().execute(TYPE_ICON, iconPath);
-        new DownloadAsyncTask().execute(TYPE_CLOSE, closePath);
-        AppPreferences.setString(context, AppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
-        AppPreferences.setString(context, AppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
-        AppPreferences.setString(context, AppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
+        new DownloadImageAsyncTask().execute(TYPE_ICON, iconPath);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
     }
 }

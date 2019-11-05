@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class AppPreferences {
+public class IBotAppPreferences {
     public static final String NAME = "_IBOT";
 
     public static final String IBOT_BUTTON_BG_COLOR = "IBOT_BUTTON_BG_COLOR";

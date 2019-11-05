@@ -30,16 +30,17 @@ public class MainActivity extends AppCompatActivity {
 
         IBotSDK sdk = new IBotSDK(getApplicationContext(), "발급받은 api key");
         sdk.openIBotWithBrowser();
+        sdk.setChatActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sdk.showIBotButton(MainActivity.this, true, IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON, buttonLayer);
     }
 }
 ```
 #### About Function
-private void initSDK(final Context context, final String apiKey)
- - apiKey : 발급받은 api key
-
 public void openIBotWithBrowser()
  IBot chatting창을 외부 브라우저로 열고 싶을 경우 설정
+
+public void setChatActivityOrientation(int orientation)
+ IBot chatting창의 orientation 설정
 
 public void showIBotButton(final Context context, boolean isShow, int type, ViewGroup view)
  - isShow : 버튼을 노출 시키고 싶을 경우 true. 그렇지 않으면 false
