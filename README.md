@@ -5,7 +5,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:0.0.13'
+      implementation 'com.enliple:0.0.25'
    }
 ```
 or use Maven:
@@ -14,7 +14,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.13</version>
+  <version>0.0.25</version>
   <type>pom</type>
 </dependency>
 ```
@@ -61,9 +61,9 @@ public void showIBotButton(final Context context, boolean isShow, final boolean 
    ![showbot_icon_50](https://user-images.githubusercontent.com/56538133/66888822-0169b980-f01b-11e9-8501-9540a4fc1408.png)
 
 #### animationType
-   - IBotChatButton.ANIMATION_FADE_IN : FADE IN 효과 
+   - IBotChatButton.ANIMATION_FADE_IN : FADE IN 효과
    - IBotChatButton.ANIMATION_RAISE_UP : 버튼이 아래서 위로 올라오면서 노출
-   - IBotChatButton.ANIMATION_FLICKER : 버튼이 깜박이면서 노출 
+   - IBotChatButton.ANIMATION_FLICKER : 버튼이 깜박이면서 노출
    - IBotChatButton.ANIMATION_ROTATE : 버튼이 회전하면서 노출
    - IBotChatButton.ANIMATION_SPRING : 스프링처럼 BOUNCE 되면서 노출
 
