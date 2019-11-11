@@ -1,5 +1,6 @@
 package com.enliple.ibotsdk;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,9 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
@@ -29,6 +33,8 @@ public class IBotSDK {
     private static final String TYPE_ICON = "0";
     private static final String TYPE_CLOSE = "1";
 
+    private GestureDetector gestureDetector;
+
     private Context context;
     private String apiKey = "";
     private String url = "";
@@ -38,6 +44,10 @@ public class IBotSDK {
     private String iconPath, closePath, bgColor, textColor, textStr;
     private long regDate = 0;
     private int orientation = -100;
+
+    private float moveX = 0f;
+    private float moveY = 0f;
+
 
     private IBotChatButton button;
     private Handler handler = new Handler() {
@@ -153,13 +163,50 @@ public class IBotSDK {
         this.orientation = orientation;
     }
 
-    public void showIBotButton(final Context context, boolean isShow, int type, ViewGroup view) {
+    public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, int animationType, ViewGroup view) {
         if  (isShow && !TextUtils.isEmpty(apiKey)) {
             if ( view != null )
                 view.removeAllViews();
-            button = new IBotChatButton(context, apiKey, type, this);
+            button = new IBotChatButton(context, apiKey, type, animationType, view, this);
+            view.setOnClickListener(null);
+            view.setOnTouchListener(null);
+            moveX = 0f;
+            moveY = 0f;
             view.addView(button);
-
+            gestureDetector = new GestureDetector(context, new SingleTapConfirm());
+            Log.e("TAG", "isDraggable :: " + isDraggable);
+            if ( isDraggable ) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.setTranslationZ(90f);
+                }
+                view.setOnTouchListener(new ViewGroup.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        Log.e("TAG", "onTouch");
+                        if ( gestureDetector.onTouchEvent(event) ) {
+                            Log.e("TAG", "CLICK OCCURRED");
+                            goIBotChat();
+                            return true;
+                        } else {
+                            Log.e("TAG", "DRAG OCCURRED");
+                            if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+                                moveX = v.getX() - event.getRawX();
+                                moveY = v.getY() - event.getRawY();
+                            } else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
+                                v.animate() .x(event.getRawX() + moveX) .y(event.getRawY() + moveY) .setDuration(0) .start();
+                            }
+                            return true;
+                        }
+                    }
+                });
+            } else {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goIBotChat();
+                    }
+                });
+            }
             initSDK(context, apiKey);
         }
     }
@@ -226,5 +273,13 @@ public class IBotSDK {
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
+    }
+
+    private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            return true;
+        }
     }
 }

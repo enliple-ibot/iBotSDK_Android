@@ -16,4 +16,17 @@
         <item>ORIENTATION_PORTRAIT</item>
         <item>ORIENTATION_LANDSCAPE</item>
     </string-array>
+
+    <string-array name="draggable">
+        <item>DRAGGABLE</item>
+        <item>FIXED</item>
+    </string-array>
+
+    <string-array name="animate">
+        <item>FADE_IN</item>
+        <item>RAISE_UP</item>
+        <item>FLICKER</item>
+        <item>ROTATE</item>
+        <item>BOUNCE</item>
+    </string-array>
 </resources>

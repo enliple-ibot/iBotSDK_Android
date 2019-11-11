@@ -5,6 +5,8 @@
     <string name="title_open">Choose how your chat window will open</string>
     <string name="title_orientation">Choose the orientation of the chat window</string>
     <string name="title_type">Choose the type of button</string>
+    <string name="title_draggable">Choose draggable setting</string>
+    <string name="title_animate">Choose Button Animation</string>
     <string name="show_button"> Set and Show Button</string>
     <string name="set_button">IBot button setup is complete.</string>
 </resources>
