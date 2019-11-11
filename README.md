@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         IBotSDK sdk = new IBotSDK(getApplicationContext(), "발급받은 api key");
         sdk.openIBotWithBrowser();
         sdk.setChatActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        sdk.showIBotButton(MainActivity.this, true, IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON, buttonLayer);
+        sdk.showIBotButton(MainActivity.this, true, true, IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON, IBotChatButton.ANIMATION_FADE_IN, buttonLayer);
     }
 }
 ```
@@ -42,9 +42,11 @@ public void openIBotWithBrowser()
 public void setChatActivityOrientation(int orientation)
  IBot chatting창의 orientation 설정
 
-public void showIBotButton(final Context context, boolean isShow, int type, ViewGroup view)
+public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, int animationType, ViewGroup view)
  - isShow : 버튼을 노출 시키고 싶을 경우 true. 그렇지 않으면 false
+ - isDraggable : 버튼을 touch and drag가 가능하게 하려면 true. 그렇지 않으면 false
  - type : 아래 type 참조
+ - animationType : 버튼 노출 시 animation 효과, 아래 animationType 참조
  - view : IBot 버튼을 노출시키고 싶은 view (LinearLayout, RelativeLayout etc.)
 
 #### Type
@@ -57,6 +59,13 @@ public void showIBotButton(final Context context, boolean isShow, int type, View
    - IBotChatButton.TYPE_NON_EXPANDABLE_BUTTON : 버튼만 존재하며 확장영역이 나타나지 않음
 
    ![showbot_icon_50](https://user-images.githubusercontent.com/56538133/66888822-0169b980-f01b-11e9-8501-9540a4fc1408.png)
+
+#### animationType
+   - IBotChatButton.ANIMATION_FADE_IN : FADE IN 효과 
+   - IBotChatButton.ANIMATION_RAISE_UP : 버튼이 아래서 위로 올라오면서 노출
+   - IBotChatButton.ANIMATION_FLICKER : 버튼이 깜박이면서 노출 
+   - IBotChatButton.ANIMATION_ROTATE : 버튼이 회전하면서 노출
+   - IBotChatButton.ANIMATION_SPRING : 스프링처럼 BOUNCE 되면서 노출
 
 
 
