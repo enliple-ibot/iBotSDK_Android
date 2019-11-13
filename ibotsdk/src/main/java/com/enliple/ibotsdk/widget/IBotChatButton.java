@@ -49,6 +49,7 @@ public class IBotChatButton extends FrameLayout {
     public static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
     public static final int DEFAULT_SIZE = 60; // default ChatBotButton size
     public static final int DEFAULT_TEXT_SIZE = 14; // expanding area에 있는 문구의 default size
+    public static final int ANIMATION_NONE = -1;
     public static final int ANIMATION_FADE_IN = 0;
     public static final int ANIMATION_RAISE_UP = 1;
     public static final int ANIMATION_FLICKER = 2;
@@ -67,7 +68,7 @@ public class IBotChatButton extends FrameLayout {
     private ImageView buttonBg;
 
     private int type = TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
-    private int animationType = -1;
+    private int animationType = ANIMATION_NONE;
     private GradientDrawable buttonBarBackground;
     private Drawable bBgImage;
     private Drawable cBtnImage;

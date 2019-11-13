@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -113,6 +114,7 @@ public class IBotSDKChatActivity extends Activity {
         webView.setWebChromeClient(webChromeClient);
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                Log.e("TAG", "*************** url :: " + url);
                 if ( url != null ) {
                     if ( url.startsWith("http://") || url.startsWith("https://") )
                         webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
@@ -143,9 +145,17 @@ public class IBotSDKChatActivity extends Activity {
         settings.setJavaScriptEnabled(true);
 
         webView.addJavascriptInterface(new IBotJavascriptInterface(), IBOT_JAVASCRIPT_NAME);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
             webView.loadUrl(loadUrl);
+    }
+
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
