@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:0.0.46'
+      implementation 'com.enliple:0.0.47'
    }
 ```
 or use Maven:
@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.46</version>
+  <version>0.0.47</version>
   <type>pom</type>
 </dependency>
 ```
@@ -41,16 +41,24 @@ public class MainActivity extends AppCompatActivity {
 ```
 #### About Function
 public void openIBotWithBrowser()
- IBot chatting창을 외부 브라우저로 열고 싶을 경우 설정
+ IBot 채팅창을 외부 브라우저로 열고 싶을 경우 설정
 
 public void setChatActivityOrientation(int orientation)
- IBot chatting창의 orientation 설정
+ IBot 채팅창의 orientation 설정
 
-public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, int animationType, ViewGroup view)
+public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, ViewGroup view)
  - isShow : 버튼을 노출 시키고 싶을 경우 true. 그렇지 않으면 false
  - isDraggable : 버튼을 touch and drag가 가능하게 하려면 true. 그렇지 않으면 false
  - type : 아래 type 참조
  - view : IBot 버튼을 노출시키고 싶은 view (LinearLayout, RelativeLayout etc.)
+
+public void showIBotInBrowser()
+ IBotButton의 클릭 없이 외부 브라우저로 바로 채팅창을 열고 싶을 경우 호출
+
+ ```java
+  IBotSDK sdk = new IBotSDK(getApplicationContext(), "발급받은 api key");
+  sdk.showIBotInBrowser();
+```
 
 #### Type
    - IBotChatButton.TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON : 버튼이 화면 오른쪽에 위치하며 확장 영역이 우측에서 좌측으로 늘어남

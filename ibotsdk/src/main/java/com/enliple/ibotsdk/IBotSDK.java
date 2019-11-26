@@ -344,4 +344,51 @@ public class IBotSDK {
         float distancePx = (float)Math.sqrt((dx * dx + dy * dy));
         return distancePx / context.getResources().getDisplayMetrics().density;
     }
+
+    public void showIBotInBrowser() {
+        new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
+            @Override
+            public void onResponse(boolean result, Object obj) {
+                if ( result ) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(obj.toString());
+                        Log.e("TAG", "OBJ :: " + obj.toString());
+                        url = jsonObject.optString("url");
+                        if ( !TextUtils.isEmpty(url) ) {
+                            new IBotNetworkAsyncTask().isAlivePackage(apiKey, new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
+                                @Override
+                                public void onResponse(boolean result, Object obj) {
+                                    if ( result ) {
+                                        if ( apiKey != null && !TextUtils.isEmpty(apiKey) && url != null && !TextUtils.isEmpty(url) ) {
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(obj.toString());
+                                                boolean rt = jsonObject.optBoolean("result", false);
+                                                if ( rt ) {
+                                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                                    browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    context.startActivity(browserIntent);
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                if ( obj != null ) {
+                                                    if ("true".equals(obj.toString())) {
+                                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                                        browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        context.startActivity(browserIntent);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        System.out.println(context.getResources().getString(R.string.ibot_Initialization_failed));
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 }
