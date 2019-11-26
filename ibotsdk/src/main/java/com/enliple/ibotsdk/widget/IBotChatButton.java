@@ -22,9 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,12 +46,15 @@ public class IBotChatButton extends FrameLayout {
     public static final int TYPE_NON_EXPANDABLE_BUTTON = 2; // expanding area가 노출되지 않으며 버튼 위치는 어느곳에든 위치할 수 있음
     public static final int DEFAULT_SIZE = 60; // default ChatBotButton size
     public static final int DEFAULT_TEXT_SIZE = 14; // expanding area에 있는 문구의 default size
-    public static final int ANIMATION_NONE = -1;
-    public static final int ANIMATION_FADE_IN = 0;
-    public static final int ANIMATION_RAISE_UP = 1;
-    public static final int ANIMATION_FLICKER = 2;
-    public static final int ANIMATION_ROTATE = 3;
-    public static final int ANIMATION_SPRING = 4;
+    public static final String ANIMATION_NONE = "ANIMATE_NONE";
+    public static final String ANIMATION_FADE_IN = "ANIMATE_0000";
+    public static final String ANIMATION_RAISE_UP = "ANIMATE_0001";
+    public static final String ANIMATION_FLICKER = "ANIMATE_0002";
+    public static final String ANIMATION_ROTATE = "ANIMATE_0003";
+    public static final String ANIMATION_SPRING = "ANIMATE_0004";
+    public static final String ANIMATION_MOVE_LEFT_TO_RIGHT = "ANIMATE_0005";
+    private static final long MAX_CLICK_DURATION = 150;
+    private static final long MAX_CLICK_DISTANCE = 70;
 
     private Context context;
     private IBotSDK sdk;
@@ -68,7 +68,7 @@ public class IBotChatButton extends FrameLayout {
     private ImageView buttonBg;
 
     private int type = TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
-    private int animationType = ANIMATION_NONE;
+    private String animationType = ANIMATION_FADE_IN;
     private GradientDrawable buttonBarBackground;
     private Drawable bBgImage;
     private Drawable cBtnImage;
@@ -80,14 +80,15 @@ public class IBotChatButton extends FrameLayout {
     private String barText;
     private String apiKey = null;
 
-    public IBotChatButton(Context context, String apiKey, int type, int animationType, ViewGroup view, IBotSDK sdk) {
+    public IBotChatButton(Context context, String apiKey, int type, ViewGroup view, IBotSDK sdk) {
         super(context);
-        this.sdk = sdk;
+        this.context = context;
         this.type = type;
         this.view = view;
-        this.animationType = animationType;
+        this.sdk = sdk;
+
         setApiKey(apiKey);
-        initViews(context);
+        initViews();
     }
 
     public IBotChatButton(Context context, AttributeSet attrs) {
@@ -98,8 +99,8 @@ public class IBotChatButton extends FrameLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    private void initViews(Context context) {
-        this.context = context;
+    private void initViews() {
+
         String infService = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater li = (LayoutInflater) context.getSystemService(infService);
         View v = li.inflate(R.layout.ibot_chat_button, this, false);
@@ -113,9 +114,9 @@ public class IBotChatButton extends FrameLayout {
         textExplain = findViewById(R.id.textExplain);
         buttonBg = findViewById(R.id.buttonBg);
 
-//        layer.setOnClickListener(clickListener);
         buttonClose.setOnClickListener(clickListener);
-
+//        layer.setOnClickListener(clickListener);
+//        buttonBg.setOnClickListener(clickListener);
         bBgImage = context.getResources().getDrawable(R.drawable.ibot_icon);
         cBtnImage = context.getResources().getDrawable(R.drawable.ibot_close_white_ico);
         barBg = context.getResources().getColor(R.color.ibot_bar_background);
@@ -149,12 +150,16 @@ public class IBotChatButton extends FrameLayout {
         String text = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey);
         if ( !TextUtils.isEmpty(text) )
             barText = text;
+        String animType = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey);
+        if ( !TextUtils.isEmpty(animType) )
+            animationType = animType;
+
         Bitmap bitmapBgImage = ((BitmapDrawable) bBgImage).getBitmap();
         int bBgImageWidth = bitmapBgImage.getWidth();
         int bBgImageHeight = bitmapBgImage.getHeight();
         int bgImageWidth = (bBgImageWidth * DEFAULT_SIZE) / bBgImageHeight;
         bgImageWidth = dpToPx(bgImageWidth);
-        Log.e("TAG", "bgImageWidth :: " + bgImageWidth + " , size :: " + size );
+
         if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
             buttonBarBackground = new GradientDrawable();
             buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
@@ -190,11 +195,13 @@ public class IBotChatButton extends FrameLayout {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 root.setBackground(buttonBarBackground);
                 buttonBg.setBackground(bBgImage);
-                buttonCloseImage.setBackground(cBtnImage);
+                if ( cBtnImage != null )
+                    buttonCloseImage.setBackground(cBtnImage);
             } else {
                 root.setBackgroundDrawable(buttonBarBackground);
                 buttonBg.setBackgroundDrawable(bBgImage);
-                buttonCloseImage.setBackgroundDrawable(cBtnImage);
+                if ( cBtnImage != null )
+                    buttonCloseImage.setBackgroundDrawable(cBtnImage);
             }
 
             textExplain.setPadding(0, 0, (int)(bgImageWidth / 2) + 20, 0);
@@ -237,11 +244,13 @@ public class IBotChatButton extends FrameLayout {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 root.setBackground(buttonBarBackground);
                 buttonBg.setBackground(bBgImage);
-                buttonCloseImage.setBackground(cBtnImage);
+                if ( cBtnImage != null )
+                    buttonCloseImage.setBackground(cBtnImage);
             } else {
                 root.setBackgroundDrawable(buttonBarBackground);
                 buttonBg.setBackgroundDrawable(bBgImage);
-                buttonCloseImage.setBackgroundDrawable(cBtnImage);
+                if ( cBtnImage != null )
+                    buttonCloseImage.setBackgroundDrawable(cBtnImage);
             }
 
             textExplain.setPadding((int)(bgImageWidth / 2) + 20, 0, 0, 0);
@@ -306,7 +315,7 @@ public class IBotChatButton extends FrameLayout {
                     });
                     mAnimator.start();
                 }
-            }, 3000);
+            }, 1);
         }
     }
 
@@ -351,6 +360,11 @@ public class IBotChatButton extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animator) {
                 root.setVisibility(View.GONE);
+                LayoutParams layerParams = (LayoutParams)layer.getLayoutParams();
+                layerParams.width = size;
+                layerParams.height = size;
+                layerParams.gravity = Gravity.RIGHT;
+                layer.setLayoutParams(layerParams);
             }
 
             @Override
@@ -366,11 +380,13 @@ public class IBotChatButton extends FrameLayout {
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            if  ( id == R.id.buttonClose )
+            if  ( id == R.id.buttonClose ) {
                 closeBar();
-            else if ( id == R.id.layer ) {
-                if ( sdk != null )
-                    sdk.goIBotChat();
+            }
+            else if ( id == R.id.buttonBg ) {
+
+            } else if ( id == R.id.layer) {
+
             }
         }
     };
@@ -407,7 +423,7 @@ public class IBotChatButton extends FrameLayout {
 
                 buttonBarBackground = new GradientDrawable();
                 buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
-                Log.e("TAG", "bgImageWidth :: " + bgImageWidth + " , size :: " + size );
+
                 if ( type == TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON ) {
                     RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
                     buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -494,11 +510,16 @@ public class IBotChatButton extends FrameLayout {
                 barText = text;
                 textExplain.setText(barText);
             }
+
+            String animType = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey);
+            if ( !TextUtils.isEmpty(animType) ) {
+                animationType = animType;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if ( animationType == ANIMATION_FADE_IN ) {
+        if ( animationType.equals(ANIMATION_FADE_IN) ) {
             Animation animation = new AlphaAnimation(0, 1);
             animation.setDuration(2500);
             layer.setVisibility(View.VISIBLE);
@@ -515,7 +536,7 @@ public class IBotChatButton extends FrameLayout {
                 @Override
                 public void onAnimationRepeat(Animation animation) {}
             });
-        } else if ( animationType == ANIMATION_RAISE_UP ) {
+        } else if ( animationType.equals(ANIMATION_RAISE_UP) ) {
             layer.setVisibility(View.VISIBLE);
             TranslateAnimation animation = new TranslateAnimation(0,0, size, 0);
             animation.setDuration(1000);
@@ -531,7 +552,7 @@ public class IBotChatButton extends FrameLayout {
                 @Override
                 public void onAnimationRepeat(Animation animation) {}
             });
-        } else if ( animationType == ANIMATION_FLICKER ) {
+        } else if ( animationType.equals(ANIMATION_FLICKER) ) {
             Animation animation = new AlphaAnimation(0, 1);
             animation.setDuration(1500);
             animation.setRepeatCount(2);
@@ -547,7 +568,7 @@ public class IBotChatButton extends FrameLayout {
                 @Override
                 public void onAnimationRepeat(Animation animation) {}
             });
-        } else if ( animationType == ANIMATION_ROTATE ) {
+        } else if ( animationType.equals(ANIMATION_ROTATE) ) {
             layer.setVisibility(View.VISIBLE);
             ObjectAnimator animator = ObjectAnimator.ofFloat(buttonBg, "rotationY", 0f, 720f);
             animator.setDuration(2000);
@@ -564,20 +585,70 @@ public class IBotChatButton extends FrameLayout {
                 @Override
                 public void onAnimationRepeat(Animator animation) {}
             });
-        } else if ( animationType == ANIMATION_SPRING ) {
+        } else if ( animationType.equals(ANIMATION_SPRING) ) {
+            try {
+                layer.setVisibility(View.VISIBLE);
+                SpringAnimation animation = new SpringAnimation(view, SpringAnimation.TRANSLATION_Y, 0).setStartVelocity(-8000);
+                animation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
+                animation.start();
+                animation.addEndListener(new SpringAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                        barAnimation();
+                    }
+                });
+            } catch (NoClassDefFoundError e1) {
+                e1.printStackTrace();
+                Animation animation = new AlphaAnimation(0, 1);
+                animation.setDuration(2500);
+                layer.setVisibility(View.VISIBLE);
+                layer.setAnimation(animation);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        barAnimation();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+            }
+        } else if ( animationType.equals(ANIMATION_MOVE_LEFT_TO_RIGHT) ) {
             layer.setVisibility(View.VISIBLE);
-            SpringAnimation animation = new SpringAnimation(view, SpringAnimation.TRANSLATION_Y, 0).setStartVelocity(-8000);
-            animation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
-            animation.start();
-            animation.addEndListener(new SpringAnimation.OnAnimationEndListener() {
+            TranslateAnimation animation = new TranslateAnimation(-(size / 2),0, 0, 0);
+            animation.setDuration(1000);
+            animation.setFillAfter(true);
+            view.startAnimation(animation);
+            animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                public void onAnimationStart(Animation animation) {}
+                @Override
+                public void onAnimationEnd(Animation animation) {
                     barAnimation();
                 }
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
             });
         } else {
+            Animation animation = new AlphaAnimation(0, 1);
+            animation.setDuration(2500);
             layer.setVisibility(View.VISIBLE);
-            barAnimation();
+            layer.setAnimation(animation);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    barAnimation();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
         }
     }
 }

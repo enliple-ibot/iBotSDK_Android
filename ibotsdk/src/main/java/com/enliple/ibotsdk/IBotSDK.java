@@ -1,6 +1,5 @@
 package com.enliple.ibotsdk;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,11 +9,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.common.IBotAppPreferences;
@@ -29,11 +29,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 public class IBotSDK {
+    private static final long MAX_CLICK_DURATION = 150;
+    private static final long MAX_CLICK_DISTANCE = 70;
     private static final int SET_RESOURCE = 1;
     private static final String TYPE_ICON = "0";
     private static final String TYPE_CLOSE = "1";
-
-    private GestureDetector gestureDetector;
 
     private Context context;
     private String apiKey = "";
@@ -41,27 +41,39 @@ public class IBotSDK {
     private boolean isGoWebView = true;
     private boolean isIconDownloaded = false;
     private boolean isCloseDownloaded = false;
-    private String iconPath, closePath, bgColor, textColor, textStr;
-    private long regDate = 0;
+    private String floatingImage, closePath, slideColor, textColor, floatingMessage, animationType;
+    private String modifyDt = "";
     private int orientation = -100;
 
-    private float moveX = 0f;
-    private float moveY = 0f;
-
+    private float mLastY = 0f;
+    private float mTouchStartX = 0f;
+    private float mTouchStartY = 0f;
+    private int mScreenWidth = 0;
+    private int mScreenHeight = 0;
+    private int mStatusBarHeight = 0;
+    private long pressStartTime = 0L;
 
     private IBotChatButton button;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if ( msg.what == SET_RESOURCE ) {
-                if ( button != null )
+                if ( button != null ) {
                     button.onReceived();
+                }
             }
         }
     };
     public IBotSDK(Context context, String apiKey) {
         this.context = context;
         this.apiKey = apiKey;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        manager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        mScreenWidth = displayMetrics.widthPixels;
+        mScreenHeight = displayMetrics.heightPixels;
+        mStatusBarHeight = getStatusBarHeight(context);
     }
 
     private void initSDK(final Context context, final String apiKey) {
@@ -72,20 +84,48 @@ public class IBotSDK {
                 if ( result ) {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
+                        Log.e("TAG", "OBJ :: " + obj.toString());
                         url = jsonObject.optString("url");
-                        Log.e("TAG", "url :: " + url);
-//                        iconPath = "https://cdn.onlinewebfonts.com/svg/img_199295.png";
+                        modifyDt = jsonObject.optString("modifyDt");
+                        floatingMessage = jsonObject.optString("floatingMessage");
+                        slideColor = jsonObject.optString("slideColor");
+                        textColor = jsonObject.optString("textColor");
+                        String animType = jsonObject.optString("animationType");
+                        if(slideColor.length() == 4) {
+                            String first = slideColor.substring(1, 2);
+                            String second = slideColor.substring(2, 3);
+                            String third = slideColor.substring(3, 4);
+                            slideColor = "#" + first + first + second + second + third + third;
+                        }
+
+                        if(textColor.length() == 4) {
+                            String first = textColor.substring(1, 2);
+                            String second = textColor.substring(2, 3);
+                            String third = textColor.substring(3, 4);
+                            textColor = "#" + first + first + second + second + third + third;
+                        }
+
+                        if ( TextUtils.isEmpty(animType) )
+                            animationType = IBotChatButton.ANIMATION_FADE_IN;
+                        else
+                            animationType = animType;
+                        floatingImage = jsonObject.optString("floatingImage");
+//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
+//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
+//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
+
+//                        floatingImage = "https://cdn.onlinewebfonts.com/svg/img_199295.png";
 //                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
 //                        iconPath = "https://bot.istore.camp/chatImages/common/showbot_icon.png";
 //                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
-                        if ( !TextUtils.isEmpty(iconPath) || !TextUtils.isEmpty(closePath) ) {
+                        if ( !TextUtils.isEmpty(floatingImage) || !TextUtils.isEmpty(closePath) ) {
                             File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
                             File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
-                            long savedDate = IBotAppPreferences.getLong(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
-                            if ( savedDate == -1 ) { // 저장한 날짜가 없으면 다운로드
+                            String savedDate = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
+                            if ( TextUtils.isEmpty(savedDate)) { // 저장한 날짜가 없으면 다운로드
                                 saveNewResources(iconFile, closeFile);
                             } else { // 저장한 날짜가 있으면
-                                if ( savedDate < regDate ) // 이미지 등록일이 최신이면
+                                if ( savedDate.equals(modifyDt) ) // 이미지 등록일이 최신이면
                                     saveNewResources(iconFile, closeFile);
                                 else // 등록일이 최신이 아니면
                                     handler.sendEmptyMessage(SET_RESOURCE);
@@ -163,18 +203,15 @@ public class IBotSDK {
         this.orientation = orientation;
     }
 
-    public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, int animationType, ViewGroup view) {
+    public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, final ViewGroup view) {
         if  (isShow && !TextUtils.isEmpty(apiKey)) {
             if ( view != null )
                 view.removeAllViews();
-            button = new IBotChatButton(context, apiKey, type, animationType, view, this);
+            button = new IBotChatButton(context, apiKey, type, view, this);
             view.setOnClickListener(null);
             view.setOnTouchListener(null);
-            moveX = 0f;
-            moveY = 0f;
             view.addView(button);
-            gestureDetector = new GestureDetector(context, new SingleTapConfirm());
-            Log.e("TAG", "isDraggable :: " + isDraggable);
+
             if ( isDraggable ) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     view.setTranslationZ(90f);
@@ -182,21 +219,36 @@ public class IBotSDK {
                 view.setOnTouchListener(new ViewGroup.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        Log.e("TAG", "onTouch");
-                        if ( gestureDetector.onTouchEvent(event) ) {
-                            Log.e("TAG", "CLICK OCCURRED");
-                            goIBotChat();
-                            return true;
-                        } else {
-                            Log.e("TAG", "DRAG OCCURRED");
-                            if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-                                moveX = v.getX() - event.getRawX();
-                                moveY = v.getY() - event.getRawY();
-                            } else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
-                                v.animate() .x(event.getRawX() + moveX) .y(event.getRawY() + moveY) .setDuration(0) .start();
+                        mLastY = event.getRawY();
+                        if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
+                            pressStartTime = System.currentTimeMillis();
+                            mTouchStartX = event.getX();
+                            mTouchStartY = event.getY();
+                            return false;
+                        } else if ( event.getAction() == MotionEvent.ACTION_UP ) {
+                            long presssDuration = System.currentTimeMillis() - pressStartTime;
+                            if ( (presssDuration < MAX_CLICK_DURATION) && (getDistance(mTouchStartX, mTouchStartY, event.getX(), event.getY()) < MAX_CLICK_DISTANCE) ) {
+                                goIBotChat();
                             }
-                            return true;
+                            mTouchStartX = 0f;
+                            mTouchStartY = 0f;
+                            return false;
+                        } else if ( event.getAction() == MotionEvent.ACTION_MOVE ) {
+                            float newY = mLastY - mTouchStartY;
+                            if (newY < 0) {
+                                newY = 0f;
+                            }
+                            int maxY = mScreenHeight - view.getHeight() - mStatusBarHeight;
+                            if (newY > maxY) {
+                                newY = (float)maxY;
+                            }
+                            if ( getDistance(mTouchStartX, mTouchStartY, event.getX(), event.getY()) < 5 ) {
+
+                            } else {
+                                v.animate().y(newY).setDuration(0).start();
+                            }
                         }
+                        return true;
                     }
                 });
             } else {
@@ -257,7 +309,7 @@ public class IBotSDK {
             super.onPostExecute(s);
             if ( type ) isIconDownloaded = true; else isCloseDownloaded = true;
             if ( isIconDownloaded && isCloseDownloaded ) {
-                IBotAppPreferences.setLong(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey, regDate);
+                IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey, modifyDt);
                 handler.sendEmptyMessage(SET_RESOURCE);
             } else
                 new DownloadImageAsyncTask().execute(TYPE_CLOSE, closePath);
@@ -269,17 +321,27 @@ public class IBotSDK {
             iconFile.delete();
         if ( closeFile.exists() )
             closeFile.delete();
-        new DownloadImageAsyncTask().execute(TYPE_ICON, iconPath);
-        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
+        new DownloadImageAsyncTask().execute(TYPE_ICON, floatingImage);
+
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, slideColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
-        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, floatingMessage);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey, animationType);
     }
 
-    private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent event) {
-            return true;
+    private int getStatusBarHeight(Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if ( resourceId > 0 ) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
         }
+        return result;
+    }
+
+    private float getDistance(float x1, float y1, float x2, float y2) {
+        float dx = x1 - x2;
+        float dy = y1 - y2;
+        float distancePx = (float)Math.sqrt((dx * dx + dy * dy));
+        return distancePx / context.getResources().getDisplayMetrics().density;
     }
 }

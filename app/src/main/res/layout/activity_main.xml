@@ -4,182 +4,191 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="17dp"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginBottom="15dp"
-        android:text="@string/sample"
-        android:textColor="@android:color/black"/>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title"
-        android:paddingBottom="100dp"
-        android:orientation="vertical">
-
+        android:padding="17dp" >
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/title_open"
-            android:textColor="@color/dark_gray"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textSize="25sp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/ibot_round_gray_line_bg">
+            android:text="@string/sample"
+            android:textColor="@android:color/black"/>
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/openSpinner"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:paddingBottom="100dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_open"
+                android:textColor="@color/dark_gray"/>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
 
-        </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/openSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="15dp"
-            android:background="#cccccc"/>
+            </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/title_type"
-            android:textColor="@color/dark_gray"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ibot_round_gray_line_bg">
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/typeSpinner"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
 
-        </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_type"
+                android:textColor="@color/dark_gray"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="15dp"
-            android:background="#cccccc"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/title_orientation"
-            android:textColor="@color/dark_gray"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ibot_round_gray_line_bg">
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/orientationSpinner"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
 
-        </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/typeSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="15dp"
-            android:background="#cccccc"/>
+            </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/title_draggable"
-            android:textColor="@color/dark_gray"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ibot_round_gray_line_bg">
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/draggableSpinner"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
 
-        </RelativeLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_orientation"
+                android:textColor="@color/dark_gray"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="15dp"
-            android:background="#cccccc"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/title_draggable"
-            android:textColor="@color/dark_gray"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ibot_round_gray_line_bg">
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/animateSpinner"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
 
-        </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/orientationSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginBottom="15dp"
-            android:background="#cccccc"/>
+            </RelativeLayout>
 
-        <Button
-            android:id="@+id/btnShow"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="#aaaaaa"
-            android:gravity="center"
-            android:text="@string/show_button"
-            android:textSize="16sp"
-            android:layout_marginBottom="20dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"/>
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_draggable"
+                android:textColor="@color/dark_gray"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/draggableSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_animate"
+                android:textColor="@color/dark_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/animateSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
+
+            <Button
+                android:id="@+id/btnShow"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#aaaaaa"
+                android:gravity="center"
+                android:text="@string/show_button"
+                android:textSize="16sp"
+                android:layout_marginBottom="20dp"/>
+
+            <RelativeLayout
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/btnLayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="17dp"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

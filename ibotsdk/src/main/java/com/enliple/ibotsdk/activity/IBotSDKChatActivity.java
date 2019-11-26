@@ -2,7 +2,6 @@ package com.enliple.ibotsdk.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -34,7 +34,11 @@ public class IBotSDKChatActivity extends Activity {
     private String loadUrl = "";
     private String finishedUrl = "";
     private String uid = "";
-
+    private StringBuilder builder;
+    private Listener listener;
+    public interface Listener {
+        void cookieDeleted();
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -47,7 +51,7 @@ public class IBotSDKChatActivity extends Activity {
                         if ( arg.contains(IBotKey.UID) ) {
                             String[] value = arg.split("=");
                             uid = value[1];
-                            if ( TextUtils.isEmpty(uid) ) {
+                            if ( TextUtils.isEmpty(uid) || "''".equals(uid) ) {
                                 Message message = new Message();
                                 message.what = SEND_COOKIE;
                                 handler.sendMessageDelayed(message, 1000);
@@ -109,16 +113,34 @@ public class IBotSDKChatActivity extends Activity {
 
         webView = findViewById(R.id.webView);
 
-        WebChromeClient webChromeClient = new WebChromeClient();
+        builder = new StringBuilder();
+
+
+//        WebChromeClient webChromeClient = new WebChromeClient();
         WebSettings settings = webView.getSettings();
-        webView.setWebChromeClient(webChromeClient);
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                String message = consoleMessage.message() + '\n' + consoleMessage.messageLevel() + '\n' + consoleMessage.sourceId();
+                builder.append(message);
+                builder.append("\n");
+                return super.onConsoleMessage(consoleMessage);
+            }
+        });
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                Log.e("TAG", "*************** url :: " + url);
                 if ( url != null ) {
-                    if ( url.startsWith("http://") || url.startsWith("https://") )
-                        webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                    else if ( url.startsWith("tel:") )
+//                    if ( !url.equals(loadUrl) && (url.startsWith("http://") || url.startsWith("https://")) )
+                    if ( url.startsWith("http://") || url.startsWith("https://") ) {
+                        if ( url.equals(loadUrl) ) {
+                            if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) ) {
+                                webView.loadUrl(loadUrl);
+                                return false;
+                            }
+                        } else {
+                            webView.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                        }
+                    } else if ( url.startsWith("tel:") )
                         webView.getContext().startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
                     else if ( url.startsWith("mailto:") )
                         webView.getContext().startActivity(new Intent(Intent.ACTION_SENDTO, Uri.parse(url)));
@@ -145,17 +167,26 @@ public class IBotSDKChatActivity extends Activity {
         settings.setJavaScriptEnabled(true);
 
         webView.addJavascriptInterface(new IBotJavascriptInterface(), IBOT_JAVASCRIPT_NAME);
+
+        if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
+            webView.loadUrl(loadUrl);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
-            webView.loadUrl(loadUrl);
+//        if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
+//            webView.loadUrl(loadUrl);
     }
 
+    @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -164,10 +195,7 @@ public class IBotSDKChatActivity extends Activity {
     }
 
     public void onBackPressed() {
-        if ( webView != null && webView.canGoBack() )
-            webView.goBack();
-        else
-            finish();
+        finish();
     }
 
     public class IBotJavascriptInterface {
@@ -175,5 +203,13 @@ public class IBotSDKChatActivity extends Activity {
         public void onAppViewClose() {
             finish();
         }
+    }
+
+    private void deleteUID(Listener listener) {
+        String cookieString = IBotKey.UID + "=''";
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setCookie(loadUrl, cookieString);
+        if ( listener != null )
+            listener.cookieDeleted();
     }
 }

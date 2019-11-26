@@ -12,6 +12,8 @@ public class IBotAppPreferences {
     public static final String IBOT_TEXT_COLOR = "IBOT_TEXT_COLOR";
     public static final String IBOT_TEXT = "IBOT_TEXT";
     public static final String IBOT_REG_DATE = "IBOT_REG_DATE";
+    public static final String IBOT_ANIMATION_TYPE = "IBOT_ANIMATION_TYPE";
+    public static final String IBOT_CLOSE_TIME = "IBOT_CLOSE_TIME";
 
     public static String getString(Context context, String name) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName() + NAME, MODE_PRIVATE);

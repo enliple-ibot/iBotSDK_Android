@@ -59,7 +59,6 @@ public class IBotNetworkApi {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-            Log.e("TAG", "get request :: " + builtUri.toString());
             return lUrl;
         } else {
             return null;

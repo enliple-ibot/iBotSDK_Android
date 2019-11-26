@@ -12,6 +12,7 @@
         <activity
             android:name=".activity.IBotSDKChatActivity"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:launchMode="singleTop"
             android:configChanges="keyboardHidden|orientation"/>
 
     </application>

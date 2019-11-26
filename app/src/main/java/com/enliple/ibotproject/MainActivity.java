@@ -1,6 +1,7 @@
 package com.enliple.ibotproject;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatSpinner openSpinner, typeSpinner, orientationSpinner, draggableSpinner, animateSpinner;
     private Button btnShow;
     private RelativeLayout btnLayer;
+    private RelativeLayout root;
     private int type = IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
     private int animType = -1;
     private int orientation = DEFAULT;
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setSdk();
-//                Toast.makeText(MainActivity.this, getString(R.string.set_button), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -127,10 +128,25 @@ public class MainActivity extends AppCompatActivity {
         animateSpinner = findViewById(R.id.animateSpinner);
         btnShow = findViewById(R.id.btnShow);
         btnLayer = findViewById(R.id.btnLayer);
+
+        root = findViewById(R.id.root);
+//        int size = dpToPx(60);
+//        float radius = size / 2;
+//        LinearLayout.LayoutParams rootParams = (LinearLayout.LayoutParams)root.getLayoutParams();
+//        rootParams.height = size;
+//        rootParams.setMargins(0, 0, (int)(size / 2), 0);
+//        root.setLayoutParams(rootParams);
+
+        // LayerDrawable에 대해 알아볼 것
+//        Resources res = getApplicationContext().getResources();
+//        BitmapDrawable newImage = (BitmapDrawable) ContextCompat.getDrawable(MainActivity.this, R.drawable.background_shadow); //Get replacement image, can't use LayerDrawable or get error.
+//        boolean layer_drawable_changed = (setDrawableByLayerId((R.id.second_image), newImage)); //Set new drawable? Error on this line.
+
+//        root.setBackground(newImage);
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, "205");
+        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 apiKey");
 
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();
@@ -145,6 +161,10 @@ public class MainActivity extends AppCompatActivity {
         if ( draggable == FIXED )
             isDraggable = false;
 
-        sdk.showIBotButton(MainActivity.this, true, isDraggable, type, animateSpinner.getSelectedItemPosition(),  btnLayer);
+        sdk.showIBotButton(MainActivity.this, true, isDraggable, type, btnLayer);
+    }
+
+    private static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }
