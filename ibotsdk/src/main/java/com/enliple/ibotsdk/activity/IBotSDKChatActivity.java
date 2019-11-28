@@ -80,7 +80,6 @@ public class IBotSDKChatActivity extends Activity {
                                                         System.out.println("get info result " + obj.toString());
                                                 } catch (Exception e) {
                                                     e.printStackTrace();
-                                                    System.out.println("get info failed");
                                                 }
                                             }
                                         }
@@ -114,9 +113,6 @@ public class IBotSDKChatActivity extends Activity {
         webView = findViewById(R.id.webView);
 
         builder = new StringBuilder();
-
-
-//        WebChromeClient webChromeClient = new WebChromeClient();
         WebSettings settings = webView.getSettings();
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
@@ -175,8 +171,6 @@ public class IBotSDKChatActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-//        if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
-//            webView.loadUrl(loadUrl);
     }
 
     @Override

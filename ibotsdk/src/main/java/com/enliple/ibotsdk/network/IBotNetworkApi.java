@@ -2,7 +2,6 @@ package com.enliple.ibotsdk.network;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -82,6 +81,7 @@ public class IBotNetworkApi {
                     while ((line = br.readLine()) != null)
                         sb.append(line);
                     br.close();
+                    System.out.println(sb.toString());
                     if ( callbackListener != null )
                         callbackListener.onResponse(true, sb.toString());
                 } else {
@@ -121,6 +121,7 @@ public class IBotNetworkApi {
                     String line;
                     while ((line = br.readLine()) != null)
                         sb.append(line);
+                    System.out.println(sb.toString());
                     if ( callbackListener != null )
                         callbackListener.onResponse(true, sb.toString());
                 } else {

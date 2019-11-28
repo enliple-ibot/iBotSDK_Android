@@ -10,7 +10,6 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,6 @@ public class IBotSDK {
                 if ( result ) {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
-                        Log.e("TAG", "OBJ :: " + obj.toString());
                         url = jsonObject.optString("url");
                         modifyDt = jsonObject.optString("modifyDt");
                         floatingMessage = jsonObject.optString("floatingMessage");
@@ -110,23 +108,15 @@ public class IBotSDK {
                         else
                             animationType = animType;
                         floatingImage = jsonObject.optString("floatingImage");
-//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
-//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
-//                        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, textStr);
-
-//                        floatingImage = "https://cdn.onlinewebfonts.com/svg/img_199295.png";
-//                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
-//                        iconPath = "https://bot.istore.camp/chatImages/common/showbot_icon.png";
-//                        closePath = "https://bot.istore.camp/chatImages/common/ico_close_floating.png";
+//                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/sTh0fSttR4OTP9QwmXEb.png"; // for png
+//                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/4NcuVXn9RBG-PdYCxb1m.gif"; // for gif
                         if ( !TextUtils.isEmpty(floatingImage) || !TextUtils.isEmpty(closePath) ) {
-                            File iconFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_ICON + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
-                            File closeFile = new File(context.getFilesDir().getAbsolutePath() + File.separator + IBotDownloadImage.IMAGE_CLOSE + apiKey + IBotDownloadImage.IMAGE_FILE_EXTENSION);
                             String savedDate = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
                             if ( TextUtils.isEmpty(savedDate)) { // 저장한 날짜가 없으면 다운로드
-                                saveNewResources(iconFile, closeFile);
+                                saveNewResources();
                             } else { // 저장한 날짜가 있으면
                                 if ( savedDate.equals(modifyDt) ) // 이미지 등록일이 최신이면
-                                    saveNewResources(iconFile, closeFile);
+                                    saveNewResources();
                                 else // 등록일이 최신이 아니면
                                     handler.sendEmptyMessage(SET_RESOURCE);
                             }
@@ -316,11 +306,8 @@ public class IBotSDK {
         }
     }
 
-    private void saveNewResources(File iconFile, File closeFile) {
-        if ( iconFile.exists() )
-            iconFile.delete();
-        if ( closeFile.exists() )
-            closeFile.delete();
+    private void saveNewResources() {
+        deleteAllFiles();
         new DownloadImageAsyncTask().execute(TYPE_ICON, floatingImage);
 
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, slideColor);
@@ -352,7 +339,6 @@ public class IBotSDK {
                 if ( result ) {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
-                        Log.e("TAG", "OBJ :: " + obj.toString());
                         url = jsonObject.optString("url");
                         if ( !TextUtils.isEmpty(url) ) {
                             new IBotNetworkAsyncTask().isAlivePackage(apiKey, new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
@@ -390,5 +376,19 @@ public class IBotSDK {
                 }
             }
         });
+    }
+
+    private boolean deleteAllFiles() {
+        File root = new File(context.getFilesDir().getAbsolutePath());
+        File[] Files = root.listFiles();
+        if(Files != null) {
+            for(int j = 0; j < Files.length; j++) {
+                String filePath = Files[j].getAbsolutePath();
+                if ( filePath.contains(IBotDownloadImage.IMAGE_ICON + apiKey) || filePath.contains(IBotDownloadImage.IMAGE_CLOSE + apiKey))
+                    new File(filePath).delete();
+            }
+            return true;
+        }
+        return false;
     }
 }

@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout btnLayer;
     private RelativeLayout root;
     private int type = IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
-    private int animType = -1;
     private int orientation = DEFAULT;
     private int draggable = DRAGGABLE;
     private int open = WEBVIEW;
@@ -130,23 +129,10 @@ public class MainActivity extends AppCompatActivity {
         btnLayer = findViewById(R.id.btnLayer);
 
         root = findViewById(R.id.root);
-//        int size = dpToPx(60);
-//        float radius = size / 2;
-//        LinearLayout.LayoutParams rootParams = (LinearLayout.LayoutParams)root.getLayoutParams();
-//        rootParams.height = size;
-//        rootParams.setMargins(0, 0, (int)(size / 2), 0);
-//        root.setLayoutParams(rootParams);
-
-        // LayerDrawable에 대해 알아볼 것
-//        Resources res = getApplicationContext().getResources();
-//        BitmapDrawable newImage = (BitmapDrawable) ContextCompat.getDrawable(MainActivity.this, R.drawable.background_shadow); //Get replacement image, can't use LayerDrawable or get error.
-//        boolean layer_drawable_changed = (setDrawableByLayerId((R.id.second_image), newImage)); //Set new drawable? Error on this line.
-
-//        root.setBackground(newImage);
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 apiKey");
+        IBotSDK sdk = new IBotSDK(MainActivity.this, "205");
 
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();
