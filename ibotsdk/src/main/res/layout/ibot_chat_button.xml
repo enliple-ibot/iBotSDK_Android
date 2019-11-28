@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
                 android:textSize="14sp"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
                 android:text="@string/hello_ibot"/>
 

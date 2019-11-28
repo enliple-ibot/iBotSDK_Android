@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, "205");
+        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 apiKey");
 
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();
