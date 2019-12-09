@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:0.0.55'
+      implementation 'com.enliple:ibotsdk:0.0.55'
    }
 ```
 or use Maven:
