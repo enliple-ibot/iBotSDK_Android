@@ -9,6 +9,7 @@ public class IBotAppPreferences {
     public static final String NAME = "_IBOT";
 
     public static final String IBOT_BUTTON_BG_COLOR = "IBOT_BUTTON_BG_COLOR";
+    public static final String IBOT_BAR_BG_COLOR = "IBOT_BAR_BG_COLOR";
     public static final String IBOT_TEXT_COLOR = "IBOT_TEXT_COLOR";
     public static final String IBOT_TEXT = "IBOT_TEXT";
     public static final String IBOT_REG_DATE = "IBOT_REG_DATE";

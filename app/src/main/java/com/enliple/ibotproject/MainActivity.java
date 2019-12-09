@@ -4,16 +4,19 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatSpinner;
 
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.widget.IBotChatButton;
+import com.enliple.ibotsdk.widget.IBotChatButtonTypeA;
 
 public class MainActivity extends AppCompatActivity {
     private static final int TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON = 0;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int DRAGGABLE = 0;
     private static final int FIXED = 1;
     private AppCompatSpinner openSpinner, typeSpinner, orientationSpinner, draggableSpinner, animateSpinner;
+    private AppCompatEditText editColor;
     private Button btnShow;
     private RelativeLayout btnLayer;
     private RelativeLayout root;
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         orientationSpinner = findViewById(R.id.orientationSpinner);
         draggableSpinner = findViewById(R.id.draggableSpinner);
         animateSpinner = findViewById(R.id.animateSpinner);
+        editColor = findViewById(R.id.editColor);
         btnShow = findViewById(R.id.btnShow);
         btnLayer = findViewById(R.id.btnLayer);
 
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 apiKey");
+        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 api key");
 
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();
@@ -147,7 +152,20 @@ public class MainActivity extends AppCompatActivity {
         if ( draggable == FIXED )
             isDraggable = false;
 
-        sdk.showIBotButton(MainActivity.this, true, isDraggable, type, btnLayer);
+        String buttonBaseColor = editColor.getText().toString();
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)btnLayer.getLayoutParams();
+        if ( type == IBotChatButtonTypeA.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON )
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        else if ( type == IBotChatButtonTypeA.TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON )
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        else
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        btnLayer.setLayoutParams(params);
+
+        sdk.showIBotButton(MainActivity.this, true, isDraggable, type, buttonBaseColor, btnLayer);
     }
 
     private static int dpToPx(int dp) {

@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,7 +149,7 @@ public class IBotChatButton extends FrameLayout {
             cBtnImage = new BitmapDrawable(context.getResources(), closeBitmap);
         }
 
-        String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
+        String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BAR_BG_COLOR + "_" + apiKey);
         if ( !TextUtils.isEmpty(bgColor) )
             barBg = Color.parseColor(bgColor);
 
@@ -203,7 +204,7 @@ public class IBotChatButton extends FrameLayout {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 root.setBackground(buttonBarBackground);
-                if ( IBotDownloadImage.IsPngFile(closePath) ) {
+                if ( !IBotDownloadImage.IsGifFile(closePath) ) {
                     if ( cBtnImage != null )
                         buttonCloseImage.setBackground(cBtnImage);
                 } else {
@@ -211,7 +212,7 @@ public class IBotChatButton extends FrameLayout {
                 }
             } else {
                 root.setBackgroundDrawable(buttonBarBackground);
-                if ( IBotDownloadImage.IsPngFile(closePath) ) {
+                if ( !IBotDownloadImage.IsGifFile(closePath) ) {
                     if ( cBtnImage != null )
                         buttonCloseImage.setBackgroundDrawable(cBtnImage);
                 } else {
@@ -219,7 +220,7 @@ public class IBotChatButton extends FrameLayout {
                 }
             }
 
-            if ( IBotDownloadImage.IsPngFile(iconPath) ) {
+            if ( !IBotDownloadImage.IsGifFile(iconPath) ) {
                 setBackground(buttonBg, bBgImage);
             } else {
                 setGifFile(buttonBg, iconFile);
@@ -265,7 +266,7 @@ public class IBotChatButton extends FrameLayout {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 root.setBackground(buttonBarBackground);
-                if ( IBotDownloadImage.IsPngFile(closePath) ) {
+                if ( !IBotDownloadImage.IsGifFile(closePath) ) {
                     if ( cBtnImage != null ) {
                         buttonCloseImage.setBackground(cBtnImage);
                     }
@@ -274,7 +275,7 @@ public class IBotChatButton extends FrameLayout {
                 }
             } else {
                 root.setBackgroundDrawable(buttonBarBackground);
-                if ( IBotDownloadImage.IsPngFile(closePath) ) {
+                if ( !IBotDownloadImage.IsGifFile(closePath) ) {
                     if ( cBtnImage != null )
                         buttonCloseImage.setBackgroundDrawable(cBtnImage);
                 } else {
@@ -282,7 +283,7 @@ public class IBotChatButton extends FrameLayout {
                 }
             }
 
-            if ( IBotDownloadImage.IsPngFile(iconPath) ) {
+            if ( !IBotDownloadImage.IsGifFile(iconPath) ) {
                 setBackground(buttonBg, bBgImage);
             } else {
                 setGifFile(buttonBg, iconFile);
@@ -311,7 +312,7 @@ public class IBotChatButton extends FrameLayout {
             buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             buttonBg.setLayoutParams(buttonParams);
 
-            if ( IBotDownloadImage.IsPngFile(iconPath) ) {
+            if ( !IBotDownloadImage.IsGifFile(iconPath) ) {
                 setBackground(buttonBg, bBgImage);
             } else {
                 setGifFile(buttonBg, iconFile);
@@ -399,7 +400,7 @@ public class IBotChatButton extends FrameLayout {
                 LayoutParams layerParams = (LayoutParams)layer.getLayoutParams();
                 layerParams.width = sizeWidth;
                 layerParams.height = sizeHeight;
-                layerParams.gravity = Gravity.RIGHT;
+//                layerParams.gravity = Gravity.RIGHT;
                 layer.setLayoutParams(layerParams);
             }
 
@@ -512,7 +513,7 @@ public class IBotChatButton extends FrameLayout {
                         buttonBg.setLayoutParams(buttonParams);
                     }
 
-                    if ( IBotDownloadImage.IsPngFile(iconFilePath) ) {
+                    if ( !IBotDownloadImage.IsGifFile(iconFilePath) ) {
                         setBackground(buttonBg, bBgImage);
                     } else {
                         setGifFile(buttonBg, iconFile);
@@ -532,7 +533,7 @@ public class IBotChatButton extends FrameLayout {
                 }
             }
 
-            String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey);
+            String bgColor = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_BAR_BG_COLOR + "_" + apiKey);
             if ( !TextUtils.isEmpty(bgColor) )
                 barBg = Color.parseColor(bgColor);
             buttonBarBackground.setColor(barBg);

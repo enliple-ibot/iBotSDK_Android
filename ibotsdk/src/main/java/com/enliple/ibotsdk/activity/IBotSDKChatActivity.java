@@ -126,7 +126,6 @@ public class IBotSDKChatActivity extends Activity {
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 if ( url != null ) {
-//                    if ( !url.equals(loadUrl) && (url.startsWith("http://") || url.startsWith("https://")) )
                     if ( url.startsWith("http://") || url.startsWith("https://") ) {
                         if ( url.equals(loadUrl) ) {
                             if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) ) {
@@ -164,6 +163,13 @@ public class IBotSDKChatActivity extends Activity {
 
         webView.addJavascriptInterface(new IBotJavascriptInterface(), IBOT_JAVASCRIPT_NAME);
 
+//        deleteUID(new Listener() {
+//            @Override
+//            public void cookieDeleted() {
+//                if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
+//                    webView.loadUrl(loadUrl);
+//            }
+//        });
         if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
             webView.loadUrl(loadUrl);
     }
@@ -180,6 +186,8 @@ public class IBotSDKChatActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        // 채팅창 나갈 때는 handler message 모두 cancel
+        handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 

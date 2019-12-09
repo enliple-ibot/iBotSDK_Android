@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:0.0.50'
+      implementation 'com.enliple:0.0.55'
    }
 ```
 or use Maven:
@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.50</version>
+  <version>0.0.55</version>
   <type>pom</type>
 </dependency>
 ```
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         IBotSDK sdk = new IBotSDK(getApplicationContext(), "발급받은 api key");
         sdk.openIBotWithBrowser();
         sdk.setChatActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        sdk.showIBotButton(MainActivity.this, true, true, IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON, buttonLayer);
+        sdk.showIBotButton(MainActivity.this, true, true, IBotChatButton.TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON, "#ffffff", buttonLayer);
     }
 }
 ```
@@ -46,10 +46,11 @@ public void openIBotWithBrowser()
 public void setChatActivityOrientation(int orientation)
  IBot 채팅창의 orientation 설정
 
-public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, ViewGroup view)
+public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, String bgColor, ViewGroup view)
  - isShow : 버튼을 노출 시키고 싶을 경우 true. 그렇지 않으면 false
  - isDraggable : 버튼을 touch and drag가 가능하게 하려면 true. 그렇지 않으면 false
  - type : 아래 type 참조
+ - bgColor : 버튼의 배경 색 ( 버튼 이미지에 투명색이 포함됬을 경우 이를 대체하기 위함 ), 아래 Color 참조
  - view : IBot 버튼을 노출시키고 싶은 view (LinearLayout, RelativeLayout etc.)
 
 public void showIBotInBrowser()
@@ -70,6 +71,13 @@ public void showIBotInBrowser()
    - IBotChatButton.TYPE_NON_EXPANDABLE_BUTTON : 버튼만 존재하며 확장영역이 나타나지 않음
 
    ![showbot_icon_50](https://user-images.githubusercontent.com/56538133/66888822-0169b980-f01b-11e9-8501-9540a4fc1408.png)
+
+
+#### Color
+  - 3자리, 6자리 hex code 값
+    ex) #fff, #ffffff
+    * alpha 값이 포함된 8자리 값은 사용 안됨. 만일 alpha 값이 포함될 경우 맨 앞 2자리 삭제
+    ex) #ffaaaaaa -> #aaaaaa로 적용됨
 
 
 

@@ -21,7 +21,7 @@ public class IBotDownloadImage {
         String savePath = context.getFilesDir().getAbsolutePath();
         File dir = new File(savePath);
         String extension = IBotDownloadImage.IMAGE_FILE_EXTENSION_PNG;
-        if ( !IsPngFile(path) )
+        if ( IsGifFile(path) )
             extension = IBotDownloadImage.IMAGE_FILE_EXTENSION_GIF;
         if (!dir.exists())
             dir.mkdirs();
@@ -53,14 +53,24 @@ public class IBotDownloadImage {
         }
     }
 
-    public static boolean IsPngFile(String path) {
-        if ( path != null ) {
-            if ( path.toLowerCase().endsWith(".png") )
-                return true;
-            else
-                return false;
-        } else {
+//    public static boolean IsPngFile(String path) {
+//        if ( path != null ) {
+//            if ( path.toLowerCase().endsWith(".png") )
+//                return true;
+//            else
+//                return false;
+//        } else {
+//            return true;
+//        }
+//    }
+public static boolean IsGifFile(String path) {
+    if ( path != null ) {
+        if ( path.toLowerCase().endsWith(".gif") )
             return true;
-        }
+        else
+            return false;
+    } else {
+        return true;
     }
+}
 }

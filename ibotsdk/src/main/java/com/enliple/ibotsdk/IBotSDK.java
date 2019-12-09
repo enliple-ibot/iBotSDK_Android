@@ -2,6 +2,7 @@ package com.enliple.ibotsdk;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,16 +11,20 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import androidx.annotation.RequiresApi;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.common.IBotAppPreferences;
 import com.enliple.ibotsdk.common.IBotDownloadImage;
 import com.enliple.ibotsdk.network.IBotNetworkAsyncTask;
 import com.enliple.ibotsdk.widget.IBotChatButton;
+import com.enliple.ibotsdk.widget.IBotChatButtonTypeA;
 
 import org.json.JSONObject;
 
@@ -52,8 +57,10 @@ public class IBotSDK {
     private int mStatusBarHeight = 0;
     private long pressStartTime = 0L;
 
-    private IBotChatButton button;
+//    private IBotChatButton button;
+    private IBotChatButtonTypeA button;
     private Handler handler = new Handler() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void handleMessage(Message msg) {
             if ( msg.what == SET_RESOURCE ) {
@@ -89,6 +96,9 @@ public class IBotSDK {
                         slideColor = jsonObject.optString("slideColor");
                         textColor = jsonObject.optString("textColor");
                         String animType = jsonObject.optString("animationType");
+                        // br tag 들어오면 \n으로 변환<br/>
+                        floatingMessage = floatingMessage.replaceAll("<br/>", "\n");
+                        floatingMessage = floatingMessage.replaceAll("<br>", "\n");
                         if(slideColor.length() == 4) {
                             String first = slideColor.substring(1, 2);
                             String second = slideColor.substring(2, 3);
@@ -110,14 +120,15 @@ public class IBotSDK {
                         floatingImage = jsonObject.optString("floatingImage");
 //                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/sTh0fSttR4OTP9QwmXEb.png"; // for png
 //                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/4NcuVXn9RBG-PdYCxb1m.gif"; // for gif
+//                        floatingImage = "https://img.favpng.com/3/16/9/uniform-resource-locator-computer-icons-url-shortening-png-favpng-Z3PQqzaqv6nJvripuYjuzjUGs.jpg";
                         if ( !TextUtils.isEmpty(floatingImage) || !TextUtils.isEmpty(closePath) ) {
                             String savedDate = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
                             if ( TextUtils.isEmpty(savedDate)) { // 저장한 날짜가 없으면 다운로드
                                 saveNewResources();
                             } else { // 저장한 날짜가 있으면
-                                if ( savedDate.equals(modifyDt) ) // 이미지 등록일이 최신이면
+                                if ( !savedDate.equals(modifyDt) ) {      //다운받은 날짜와 api로 넘어온 날짜가 다르면 신규 파일이 있다는 뜻
                                     saveNewResources();
-                                else // 등록일이 최신이 아니면
+                                } else // 신규 파일이 없음
                                     handler.sendEmptyMessage(SET_RESOURCE);
                             }
                         } else
@@ -193,11 +204,49 @@ public class IBotSDK {
         this.orientation = orientation;
     }
 
-    public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, final ViewGroup view) {
+    public void showIBotButton(final Context context, boolean isShow, final boolean isDraggable, int type, String bgColor, final ViewGroup view) {
         if  (isShow && !TextUtils.isEmpty(apiKey)) {
             if ( view != null )
                 view.removeAllViews();
-            button = new IBotChatButton(context, apiKey, type, view, this);
+            if ( !TextUtils.isEmpty(bgColor) ) {
+                try {
+                    if ( !bgColor.startsWith("#") ) {
+                        // #없이 3자리만 넘어온 경우 ex : 123 -> 112233으로 변환
+                        if(bgColor.length() == 3) {
+                            String first = bgColor.substring(0, 1);
+                            String second = bgColor.substring(1, 2);
+                            String third = bgColor.substring(2, 3);
+                            bgColor = first + first + second + second + third + third;
+                        }
+
+                        // #없이 alpha값 포함된 8자리 넘어온 경우 ex : ff123123 -> 123123으로 변환
+                        if ( bgColor.length() == 8 ) {
+                            bgColor = bgColor.substring(2, bgColor.length());
+                        }
+                        bgColor = "#" + bgColor;
+                    } else {
+                        // #포함 3자리 값이 넘어온 경우 ex : #123 -> #123123으로 변환
+                        if(bgColor.length() == 4) {
+                            String first = bgColor.substring(1, 2);
+                            String second = bgColor.substring(2, 3);
+                            String third = bgColor.substring(3, 4);
+                            bgColor = "#" + first + first + second + second + third + third;
+                        }
+
+                        // #포함 alpha값 포함된 8자리 넘어온 경우 ex : #ff123123 -> #123123으로 변환
+                        if ( bgColor.length() >= 9 ) {
+                            bgColor = bgColor.replaceAll("#", "");
+                            bgColor = "#" + bgColor.substring(2, bgColor.length());
+                        }
+                    }
+                    Color.parseColor(bgColor);
+                    IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, bgColor);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            button = new IBotChatButtonTypeA(context, apiKey, type, bgColor, view, this);
+//            button = new IBotChatButton(context, apiKey, type, view, this);
             view.setOnClickListener(null);
             view.setOnTouchListener(null);
             view.addView(button);
@@ -310,7 +359,7 @@ public class IBotSDK {
         deleteAllFiles();
         new DownloadImageAsyncTask().execute(TYPE_ICON, floatingImage);
 
-        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BUTTON_BG_COLOR + "_" + apiKey, slideColor);
+        IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BAR_BG_COLOR + "_" + apiKey, slideColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, floatingMessage);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey, animationType);

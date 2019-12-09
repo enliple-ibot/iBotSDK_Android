@@ -165,6 +165,33 @@
                 android:layout_marginBottom="15dp"
                 android:background="#cccccc"/>
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/button_base_color"
+                android:textColor="@color/dark_gray"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editColor"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:textColor="@color/dark_gray"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_vertical"
+                android:inputType="text"
+                android:background="@drawable/ibot_round_gray_line_bg"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
+
             <Button
                 android:id="@+id/btnShow"
                 android:layout_width="match_parent"
@@ -186,9 +213,12 @@
     <RelativeLayout
         android:id="@+id/btnLayer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="17dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="wrap_content"/>
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/btnLayer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentLeft="true"-->
+<!--        android:layout_alignParentBottom="true"/>-->
 
 </RelativeLayout>
