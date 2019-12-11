@@ -80,10 +80,11 @@ public class IBotChatButtonTypeA extends FrameLayout {
     private RelativeLayout buttonLayer;
     private TextView textExplain;
     private ImageView btnBackground, buttonBg, msgIcon;
+    private IBotRoundLayout maskLayer;
 
     private int type = TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON;
     private String animationType = ANIMATION_FADE_IN;
-
+    public static boolean useOriginImage = true;
     private GradientDrawable buttonBarBackground;
     private GradientDrawable buttonBackground;
     private Drawable bBgImage;
@@ -120,7 +121,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
         this.type = type;
         this.view = view;
         this.sdk = sdk;
-
+        useOriginImage = false;
         setApiKey(apiKey);
         initViews();
     }
@@ -146,6 +147,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
         textExplain = findViewById(R.id.textExplain);
         btnBackground = findViewById(R.id.btnBackground);
         buttonBg = findViewById(R.id.buttonBg);
+        maskLayer = findViewById(R.id.maskLayer);
         msgIcon = findViewById(R.id.msgIcon);
 
         initImage(btnBackground);
@@ -183,6 +185,8 @@ public class IBotChatButtonTypeA extends FrameLayout {
         if ( iconFile != null && iconFile.exists() ) {
             Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
             bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
+//            bBgImage = RoundedBitmapDrawableFactory.create(getResources(),iconBitmap);
+//            ((RoundedBitmapDrawable)bBgImage).setCircular(true);
         }
 
         if ( closeFile != null && closeFile.exists() ) {
@@ -208,7 +212,6 @@ public class IBotChatButtonTypeA extends FrameLayout {
         String animType = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey);
         if ( !TextUtils.isEmpty(animType) )
             animationType = animType;
-
 //        Bitmap bitmapBgImage = ((BitmapDrawable) bBgImage).getBitmap();
 //        int bBgImageWidth = bitmapBgImage.getWidth();
 //        int bBgImageHeight = bitmapBgImage.getHeight();
@@ -242,9 +245,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
             buttonBgParams.height = btnHeight;
             btnBackground.setLayoutParams(buttonBgParams);
 
-            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+            maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            maskParam.width = btnWidth;
+            maskParam.height = btnHeight;
+            maskLayer.setLayoutParams(maskParam);
+
+            IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
             buttonParams.width = btnWidth;
             buttonParams.height = btnHeight;
             buttonBg.setLayoutParams(buttonParams);
@@ -296,9 +304,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
             buttonBgParams.height = btnHeight;
             btnBackground.setLayoutParams(buttonBgParams);
 
-            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+            maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            maskParam.width = btnWidth;
+            maskParam.height = btnHeight;
+            maskLayer.setLayoutParams(maskParam);
+
+            IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
             buttonParams.width = btnWidth;
             buttonParams.height = btnHeight;
             buttonBg.setLayoutParams(buttonParams);
@@ -358,9 +371,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
             buttonBgParams.height = btnHeight;
             btnBackground.setLayoutParams(buttonBgParams);
 
-            RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-            buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+            maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+            maskParam.width = btnWidth;
+            maskParam.height = btnHeight;
+            maskLayer.setLayoutParams(maskParam);
+
+            IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
             buttonParams.width = btnWidth;
             buttonParams.height = btnHeight;
             buttonBg.setLayoutParams(buttonParams);
@@ -498,7 +516,8 @@ public class IBotChatButtonTypeA extends FrameLayout {
                 if ( iconFile.exists() ) {
                     Bitmap iconBitmap = BitmapFactory.decodeFile(iconFile.getAbsolutePath());
                     bBgImage = new BitmapDrawable(context.getResources(), iconBitmap);
-
+//                    bBgImage = RoundedBitmapDrawableFactory.create(getResources(),iconBitmap);
+//                    ((RoundedBitmapDrawable)bBgImage).setCircular(true);
 //                    Bitmap bitmapBgImage = ((BitmapDrawable) bBgImage).getBitmap();
 //                    int bBgImageWidth = bitmapBgImage.getWidth();
 //                    int bBgImageHeight = bitmapBgImage.getHeight();
@@ -524,9 +543,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
                         buttonBgParams.height = btnHeight;
                         btnBackground.setLayoutParams(buttonBgParams);
 
-                        RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-                        buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+                        maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        maskParam.width = btnWidth;
+                        maskParam.height = btnHeight;
+                        maskLayer.setLayoutParams(maskParam);
+
+                        IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
                         buttonParams.width = btnWidth;
                         buttonParams.height = btnHeight;
                         buttonBg.setLayoutParams(buttonParams);
@@ -552,9 +576,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
                         buttonBgParams.height = btnHeight;
                         btnBackground.setLayoutParams(buttonBgParams);
 
-                        RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-                        buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+                        maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        maskParam.width = btnWidth;
+                        maskParam.height = btnHeight;
+                        maskLayer.setLayoutParams(maskParam);
+
+                        IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
                         buttonParams.width = btnWidth;
                         buttonParams.height = btnHeight;
                         buttonBg.setLayoutParams(buttonParams);
@@ -624,9 +653,14 @@ public class IBotChatButtonTypeA extends FrameLayout {
                         buttonBgParams.height = btnHeight;
                         btnBackground.setLayoutParams(buttonBgParams);
 
-                        RelativeLayout.LayoutParams buttonParams = (RelativeLayout.LayoutParams)buttonBg.getLayoutParams();
-                        buttonParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        buttonParams.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        RelativeLayout.LayoutParams maskParam = (RelativeLayout.LayoutParams)maskLayer.getLayoutParams();
+                        maskParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        maskParam.setMargins(shadowMargin, shadowMargin, shadowMargin, shadowMargin);
+                        maskParam.width = btnWidth;
+                        maskParam.height = btnHeight;
+                        maskLayer.setLayoutParams(maskParam);
+
+                        IBotRoundLayout.LayoutParams buttonParams = (IBotRoundLayout.LayoutParams)buttonBg.getLayoutParams();
                         buttonParams.width = btnWidth;
                         buttonParams.height = btnHeight;
                         buttonBg.setLayoutParams(buttonParams);
@@ -722,7 +756,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        animationType = ANIMATION_SPRING;
+
         if ( animationType.equals(ANIMATION_FADE_IN) ) {
             layer.setVisibility(View.VISIBLE);
             Animation animation = new AlphaAnimation(0, 1);
@@ -991,10 +1025,10 @@ public class IBotChatButtonTypeA extends FrameLayout {
             float cornerRadius = dpToPx(35);
             IBotOutlineProvider outlineProvider = new IBotOutlineProvider(cornerRadius, 0.96f, 1.32f, 0);
             btnBackground.setOutlineProvider(outlineProvider);
-
-            buttonBg.setElevation(17);
+            maskLayer.setElevation(17);
+//            buttonBg.setElevation(17);
             buttonLayer.setElevation(17);
-            msgIcon.setElevation(18);
+            msgIcon.setElevation(17);
 
             // 그림자에 fade in animation 효과 주기 위해
             translationZ = 0;

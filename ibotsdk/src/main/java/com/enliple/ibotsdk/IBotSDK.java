@@ -113,20 +113,22 @@ public class IBotSDK {
                             textColor = "#" + first + first + second + second + third + third;
                         }
 
-                        if ( TextUtils.isEmpty(animType) )
+                        if ( TextUtils.isEmpty(animType) ) {
                             animationType = IBotChatButton.ANIMATION_FADE_IN;
-                        else
+                        } else {
                             animationType = animType;
+                        }
                         floatingImage = jsonObject.optString("floatingImage");
 //                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/sTh0fSttR4OTP9QwmXEb.png"; // for png
 //                        floatingImage = "http://scm-enliple.iptime.org:5050/admin/floating/205/4NcuVXn9RBG-PdYCxb1m.gif"; // for gif
 //                        floatingImage = "https://img.favpng.com/3/16/9/uniform-resource-locator-computer-icons-url-shortening-png-favpng-Z3PQqzaqv6nJvripuYjuzjUGs.jpg";
+//                        floatingImage = "https://image.flaticon.com/icons/svg/2324/2324196.svg";
                         if ( !TextUtils.isEmpty(floatingImage) || !TextUtils.isEmpty(closePath) ) {
                             String savedDate = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_REG_DATE + "_" + apiKey);
                             if ( TextUtils.isEmpty(savedDate)) { // 저장한 날짜가 없으면 다운로드
                                 saveNewResources();
                             } else { // 저장한 날짜가 있으면
-                                if ( !savedDate.equals(modifyDt) ) {      //다운받은 날짜와 api로 넘어온 날짜가 다르면 신규 파일이 있다는 뜻
+                                if ( !savedDate.equals(modifyDt) ) {      //다운받은 날짜와 api로 넘어온 날짜가 다르면 신규 파일이 있음
                                     saveNewResources();
                                 } else // 신규 파일이 없음
                                     handler.sendEmptyMessage(SET_RESOURCE);
@@ -358,7 +360,6 @@ public class IBotSDK {
     private void saveNewResources() {
         deleteAllFiles();
         new DownloadImageAsyncTask().execute(TYPE_ICON, floatingImage);
-
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_BAR_BG_COLOR + "_" + apiKey, slideColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT_COLOR + "_" + apiKey, textColor);
         IBotAppPreferences.setString(context, IBotAppPreferences.IBOT_TEXT + "_" + apiKey, floatingMessage);
