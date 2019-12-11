@@ -415,6 +415,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
                             animation.setDuration(2000);
                             textExplain.setVisibility(View.VISIBLE);
                             textExplain.setAnimation(animation);
+                            autoScrollExplain();
                         }
 
                         @Override
@@ -746,7 +747,6 @@ public class IBotChatButtonTypeA extends FrameLayout {
 //                barText = "Once upon a time \n in a faraway land a young prince lived in a shinny castle. although everything his heart desire.";
 //                barText = "Once upon a time in a faraway land a young prince lived in a shinny castle. although everything his heart desire.";
                 textExplain.setText(barText);
-                autoScrollExplain();
             }
 
             String animType = IBotAppPreferences.getString(context, IBotAppPreferences.IBOT_ANIMATION_TYPE + "_" + apiKey);

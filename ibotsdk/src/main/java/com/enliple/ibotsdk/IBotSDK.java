@@ -99,6 +99,7 @@ public class IBotSDK {
                         // br tag 들어오면 \n으로 변환<br/>
                         floatingMessage = floatingMessage.replaceAll("<br/>", "\n");
                         floatingMessage = floatingMessage.replaceAll("<br>", "\n");
+
                         if(slideColor.length() == 4) {
                             String first = slideColor.substring(1, 2);
                             String second = slideColor.substring(2, 3);

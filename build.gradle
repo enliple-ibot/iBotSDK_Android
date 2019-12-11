@@ -1,11 +1,11 @@
 buildscript {
     ext.bintray_version = '0.9.1'
-    ext.ibot_sdk_version = "0.0.61"
+    ext.ibot_sdk_version = "0.0.62"
     repositories {
         google()
         jcenter()
-        
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "com.novoda:bintray-release:$bintray_version"
