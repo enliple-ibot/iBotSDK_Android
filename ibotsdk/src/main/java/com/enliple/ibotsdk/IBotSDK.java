@@ -11,13 +11,10 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import androidx.annotation.RequiresApi;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.common.IBotAppPreferences;
@@ -31,6 +28,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+
+//import androidx.annotation.RequiresApi;
 
 public class IBotSDK {
     private static final long MAX_CLICK_DURATION = 150;
@@ -60,7 +59,7 @@ public class IBotSDK {
 //    private IBotChatButton button;
     private IBotChatButtonTypeA button;
     private Handler handler = new Handler() {
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void handleMessage(Message msg) {
             if ( msg.what == SET_RESOURCE ) {

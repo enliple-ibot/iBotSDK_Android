@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
+//import androidx.annotation.RequiresApi;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
@@ -286,7 +285,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
             }
             textExplain.setText(barText);
             textExplain.setTextColor(barTextColor);
-            textExplain.setTextSize(barTextSize);
+            textExplain.setTextSize(barTextSize / getResources().getConfiguration().fontScale);
         } else if ( type == TYPE_LEFT_TO_RIGHT_EXPANDABLE_BUTTON ) {
             buttonBarBackground = new GradientDrawable();
             buttonBarBackground.setShape(GradientDrawable.RECTANGLE);
@@ -345,7 +344,7 @@ public class IBotChatButtonTypeA extends FrameLayout {
             }
             textExplain.setText(barText);
             textExplain.setTextColor(barTextColor);
-            textExplain.setTextSize(barTextSize);
+            textExplain.setTextSize(barTextSize / getResources().getConfiguration().fontScale);
         } else {
             ViewGroup.LayoutParams frameParams = frame.getLayoutParams();
             frameParams.width = btnWidth + (shadowMargin * 2);
@@ -505,8 +504,8 @@ public class IBotChatButtonTypeA extends FrameLayout {
             });
         }
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//
+//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onReceived() {
         try {
             String iconFilePath = getImageFilePath(true);
@@ -844,21 +843,41 @@ public class IBotChatButtonTypeA extends FrameLayout {
 //            });
 //            animator.start();
         } else if ( animationType.equals(ANIMATION_SPRING) ) {
-            try {
-                layer.setVisibility(View.VISIBLE);
-                msgIcon.setVisibility(View.VISIBLE);
-                SpringAnimation animation = new SpringAnimation(view, SpringAnimation.TRANSLATION_Y, 0).setStartVelocity(-8000);
-                animation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
-                animation.start();
-                animation.addEndListener(new SpringAnimation.OnAnimationEndListener() {
-                    @Override
-                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-                        setButtonShadow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                try {
+                    layer.setVisibility(View.VISIBLE);
+                    msgIcon.setVisibility(View.VISIBLE);
+                    SpringAnimation animation = new SpringAnimation(view, SpringAnimation.TRANSLATION_Y, 0).setStartVelocity(-8000);
+                    animation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
+                    animation.start();
+                    animation.addEndListener(new SpringAnimation.OnAnimationEndListener() {
+                        @Override
+                        public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                            setButtonShadow();
 //                        barAnimation();
-                    }
-                });
-            } catch (NoClassDefFoundError e1) {
-                e1.printStackTrace();
+                        }
+                    });
+                } catch (NoClassDefFoundError e1) {
+                    e1.printStackTrace();
+                    Animation animation = new AlphaAnimation(0, 1);
+                    animation.setDuration(2500);
+                    layer.setVisibility(View.VISIBLE);
+                    layer.setAnimation(animation);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            setButtonShadow();
+//                        barAnimation();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+                }
+            } else {
                 Animation animation = new AlphaAnimation(0, 1);
                 animation.setDuration(2500);
                 layer.setVisibility(View.VISIBLE);

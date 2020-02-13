@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:ibotsdk:0.0.62'
+      implementation 'com.enliple:ibotsdk:0.0.63'
    }
 ```
 or use Maven:
@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.62</version>
+  <version>0.0.63</version>
   <type>pom</type>
 </dependency>
 ```

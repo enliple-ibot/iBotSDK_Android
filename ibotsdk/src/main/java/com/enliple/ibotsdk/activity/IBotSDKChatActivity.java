@@ -160,7 +160,7 @@ public class IBotSDKChatActivity extends Activity {
             }
         });
         settings.setJavaScriptEnabled(true);
-
+        settings.setDomStorageEnabled(true);
         webView.addJavascriptInterface(new IBotJavascriptInterface(), IBOT_JAVASCRIPT_NAME);
 
 //        deleteUID(new Listener() {

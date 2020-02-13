@@ -1,14 +1,12 @@
 package com.enliple.ibotsdk.shadow;
 
+import android.annotation.SuppressLint;
 import android.graphics.Outline;
 import android.graphics.Rect;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
-import androidx.annotation.RequiresApi;
-
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+@SuppressLint("NewApi")
 public class IBotOutlineProvider extends ViewOutlineProvider {
     private float cornerRadius = 0f;
     private float scaleX = 0f;
