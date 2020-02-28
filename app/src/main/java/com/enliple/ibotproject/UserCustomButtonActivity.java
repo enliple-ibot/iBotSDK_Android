@@ -73,7 +73,6 @@ public class UserCustomButtonActivity extends Activity {
         IBotSDK sdk = new IBotSDK(UserCustomButtonActivity.this, ListActivity.API_KEY);
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();
-            sdk.showIBotInBrowser();
         }
         if ( orientation == ORIENTATION_PORTRAIT )
             sdk.setChatActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
