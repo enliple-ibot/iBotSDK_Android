@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:ibotsdk:0.0.63'
+      implementation 'com.enliple:ibotsdk:0.0.64'
    }
 ```
 or use Maven:
@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.63</version>
+  <version>0.0.64</version>
   <type>pom</type>
 </dependency>
 ```
@@ -55,6 +55,9 @@ public void showIBotButton(final Context context, boolean isShow, final boolean 
 
 public void showIBotInBrowser()
  IBotButton의 클릭 없이 외부 브라우저로 바로 채팅창을 열고 싶을 경우 호출
+
+public void initSDKForCustomButton()
+ iBot Sdk에서 제공하는 버튼이 아닌 사용자 custom button을 통해 iBot을 이용하고 싶을 경우 호출
 
  ```java
   IBotSDK sdk = new IBotSDK(getApplicationContext(), "발급받은 api key");

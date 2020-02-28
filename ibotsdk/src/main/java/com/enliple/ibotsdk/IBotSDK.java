@@ -81,6 +81,23 @@ public class IBotSDK {
         mStatusBarHeight = getStatusBarHeight(context);
     }
 
+    public void initSDKForCustomButton() {
+        new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
+            @Override
+            public void onResponse(boolean result, Object obj) {
+                if ( result ) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(obj.toString());
+                        url = jsonObject.optString("url");
+                        goIBotChat();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     private void initSDK(final Context context, final String apiKey) {
 
         new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {

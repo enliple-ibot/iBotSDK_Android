@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         draggableSpinner.setAdapter(draggableAdapter);
         animateSpinner.setAdapter(animateAdapter);
 
-        openSpinner.setSelection(TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
-        typeSpinner.setSelection(WEBVIEW);
+        openSpinner.setSelection(WEBVIEW);
+        typeSpinner.setSelection(TYPE_RIGHT_TO_LEFT_EXPANDABLE_BUTTON);
         orientationSpinner.setSelection(DEFAULT);
         draggableSpinner.setSelection(DRAGGABLE);
         animateSpinner.setSelection(0);
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, "발급받은 api key");
+        IBotSDK sdk = new IBotSDK(MainActivity.this, ListActivity.API_KEY);
 
         if ( open == BROWSER ) {
             sdk.openIBotWithBrowser();

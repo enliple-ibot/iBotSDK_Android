@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserCustomButtonActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="17dp" >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/sample"
+            android:textColor="@android:color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:paddingBottom="100dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_open"
+                android:textColor="@color/dark_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/openSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/title_orientation"
+                android:textColor="@color/dark_gray"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/ibot_round_gray_line_bg">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/orientationSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginBottom="15dp"
+                android:background="#cccccc"/>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:text="USER CUSTOM BUTTON"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
