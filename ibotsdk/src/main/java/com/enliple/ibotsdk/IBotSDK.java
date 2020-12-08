@@ -1,7 +1,9 @@
 package com.enliple.ibotsdk;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +17,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.enliple.ibotsdk.activity.IBotSDKChatActivity;
 import com.enliple.ibotsdk.common.IBotAppPreferences;
@@ -32,6 +36,8 @@ import java.util.UUID;
 //import androidx.annotation.RequiresApi;
 
 public class IBotSDK {
+    public static final String EVENT_CALLBACK = "EVENT_CALLBACK";
+    public static final String KEY_CALLBACK = "KEY_CALLBACK";
     private static final long MAX_CLICK_DURATION = 150;
     private static final long MAX_CLICK_DISTANCE = 70;
     private static final int SET_RESOURCE = 1;
@@ -69,6 +75,9 @@ public class IBotSDK {
             }
         }
     };
+
+    private CallbackListener callbackListener;
+
     public IBotSDK(Context context, String apiKey) {
         this.context = context;
         this.apiKey = apiKey;
@@ -79,6 +88,29 @@ public class IBotSDK {
         mScreenWidth = displayMetrics.widthPixels;
         mScreenHeight = displayMetrics.heightPixels;
         mStatusBarHeight = getStatusBarHeight(context);
+    }
+
+    public IBotSDK(Context context, String apiKey, CallbackListener callbackListener) {
+        this.context = context;
+        this.apiKey = apiKey;
+        this.callbackListener = callbackListener;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        manager.getDefaultDisplay().getMetrics(displayMetrics);
+
+        mScreenWidth = displayMetrics.widthPixels;
+        mScreenHeight = displayMetrics.heightPixels;
+        mStatusBarHeight = getStatusBarHeight(context);
+
+        registerBR(context);
+    }
+
+    private void registerBR(Context context) {
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, new IntentFilter(EVENT_CALLBACK));
+    }
+
+    public void unregisterReceiver() {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
     }
 
     public void initSDKForCustomButton() {
@@ -458,4 +490,20 @@ public class IBotSDK {
         }
         return false;
     }
+
+    public interface CallbackListener {
+        void onCallback(String jsonStr);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent it) {
+            String action = it.getAction();
+            if (EVENT_CALLBACK.equals(action)) {
+                String str = it.getStringExtra(KEY_CALLBACK);
+                if ( callbackListener != null )
+                    callbackListener.onCallback(str);
+            }
+        }
+    };
 }

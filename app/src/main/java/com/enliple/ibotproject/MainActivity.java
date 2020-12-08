@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private int orientation = DEFAULT;
     private int draggable = DRAGGABLE;
     private int open = WEBVIEW;
+    private IBotSDK sdk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        if ( sdk != null )
+            sdk.unregisterReceiver();
+        super.onDestroy();
+    }
+
     private void initViews() {
         openSpinner = findViewById(R.id.openSpinner);
         typeSpinner = findViewById(R.id.typeSpinner);
@@ -136,10 +144,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSdk() {
-        IBotSDK sdk = new IBotSDK(MainActivity.this, ListActivity.API_KEY);
+        // callback이 필요한 경우
+        /**
+        sdk = new IBotSDK(MainActivity.this, ListActivity.API_KEY, new IBotSDK.CallbackListener() {
+            @Override
+            public void onCallback(String str) {
+                // 채팅창으로부터 넘어오는 값 처리부
+            }
+        });
+        **/
+        // callback이 필요 없는 경우
+        sdk = new IBotSDK(MainActivity.this, ListActivity.API_KEY);
 
         if ( open == BROWSER ) {
-            sdk.openIBotWithBrowser();
+            sdk.openIBotWithBrowser(); // callback을 받아야할 경우 설정하면 안됨
         }
 
         if ( orientation == ORIENTATION_PORTRAIT )

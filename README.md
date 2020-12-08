@@ -9,7 +9,7 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:ibotsdk:0.0.65'
+      implementation 'com.enliple:ibotsdk:0.0.66'
    }
 ```
 or use Maven:
@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.65</version>
+  <version>0.0.66</version>
   <type>pom</type>
 </dependency>
 ```
@@ -82,6 +82,29 @@ public void initSDKForCustomButton()
     * alpha 값이 포함된 8자리 값은 사용 안됨. 만일 alpha 값이 포함될 경우 맨 앞 2자리 삭제
     ex) #ffaaaaaa -> #aaaaaa로 적용됨
 
+#### Callback
+  - 채팅창으로부터 값을 전달받고싶을 때 사용.
 
+  1. 아래와 같이 callback이 포함된 constructor 사용.
+   ```java
+  IBotSDK sdk = new IBotSDK(UserCustomButtonActivity.this, "발급받은 api key", new IBotSDK.CallbackListener() {
+              @Override
+              public void onCallback(String str) {
+                    // 채팅창으로 부터 넘겨받는 값(str)
+              }
+          });
+```
+
+  2. IBotSDK가 선언된 화면이 destroy 될 때 아래와 같이 unregisterReceiver 호출
+     ```java
+         @Override
+         public void onDestroy() {
+             if ( sdk != null )
+                 sdk.unregisterReceiver();
+             super.onDestroy();
+         }
+      ```
+
+  3. callback을사용할 경우 openIBotWithBrowser()를 설정하면 안됨.
 
 

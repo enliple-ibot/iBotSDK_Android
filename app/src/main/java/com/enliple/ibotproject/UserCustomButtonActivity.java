@@ -20,6 +20,7 @@ public class UserCustomButtonActivity extends Activity {
     private int orientation = DEFAULT;
     private int open = WEBVIEW;
     private AppCompatSpinner openSpinner, orientationSpinner;
+    private IBotSDK sdk;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,13 @@ public class UserCustomButtonActivity extends Activity {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        if ( sdk != null )
+            sdk.unregisterReceiver();
+        super.onDestroy();
+    }
+
     private void initViews() {
         openSpinner = findViewById(R.id.openSpinner);
         orientationSpinner = findViewById(R.id.orientationSpinner);
@@ -70,9 +78,20 @@ public class UserCustomButtonActivity extends Activity {
     }
 
     private void setButton() {
-        IBotSDK sdk = new IBotSDK(UserCustomButtonActivity.this, ListActivity.API_KEY);
+        // callback이 필요한 경우
+        /**
+        sdk = new IBotSDK(UserCustomButtonActivity.this, ListActivity.API_KEY, new IBotSDK.CallbackListener() {
+            @Override
+            public void onCallback(String str) {
+                // 채팅창으로부터 넘어오는 값 처리부
+            }
+        });
+         **/
+        // callback이 필요 없는 경우
+        sdk = new IBotSDK(UserCustomButtonActivity.this, ListActivity.API_KEY);
+
         if ( open == BROWSER ) {
-            sdk.openIBotWithBrowser();
+            sdk.openIBotWithBrowser(); // callback을 받아야할 경우 설정하면 안됨
         }
         if ( orientation == ORIENTATION_PORTRAIT )
             sdk.setChatActivityOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

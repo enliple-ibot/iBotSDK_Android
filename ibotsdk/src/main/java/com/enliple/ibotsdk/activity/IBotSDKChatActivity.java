@@ -18,6 +18,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.enliple.ibotsdk.IBotSDK;
 import com.enliple.ibotsdk.R;
 import com.enliple.ibotsdk.common.IBotKey;
@@ -208,6 +210,14 @@ public class IBotSDKChatActivity extends Activity {
     public class IBotJavascriptInterface {
         @JavascriptInterface
         public void onAppViewClose() {
+            finish();
+        }
+
+        @JavascriptInterface
+        public void onAppSend(String str) {
+            Intent intent = new Intent(IBotSDK.EVENT_CALLBACK);
+            intent.putExtra(IBotSDK.KEY_CALLBACK, str);
+            LocalBroadcastManager.getInstance(IBotSDKChatActivity.this).sendBroadcast(intent);
             finish();
         }
     }
