@@ -218,7 +218,6 @@ public class IBotSDKChatActivity extends Activity {
             Intent intent = new Intent(IBotSDK.EVENT_CALLBACK);
             intent.putExtra(IBotSDK.KEY_CALLBACK, str);
             LocalBroadcastManager.getInstance(IBotSDKChatActivity.this).sendBroadcast(intent);
-            finish();
         }
     }
 
