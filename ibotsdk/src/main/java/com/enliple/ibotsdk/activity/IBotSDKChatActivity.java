@@ -32,6 +32,7 @@ public class IBotSDKChatActivity extends Activity {
     public static final String INTENT_API_URL = "INTENT_API_URL";
     public static final String INTENT_ORIENTATION = "INTENT_ORIENTATION";
     private static final int SEND_COOKIE = 0;
+    public static Activity activity = null;
     private WebView webView = null;
 
     private String loadUrl = "";
@@ -105,7 +106,7 @@ public class IBotSDKChatActivity extends Activity {
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ibot_chat);
-
+        activity = this;
         Intent intent = getIntent();
         loadUrl = intent.getStringExtra(INTENT_API_URL);
         int orientation = intent.getIntExtra(INTENT_ORIENTATION, -100);
@@ -195,6 +196,7 @@ public class IBotSDKChatActivity extends Activity {
     public void onDestroy() {
         // 채팅창 나갈 때는 handler message 모두 cancel
         handler.removeCallbacksAndMessages(null);
+        activity = null;
         super.onDestroy();
     }
 

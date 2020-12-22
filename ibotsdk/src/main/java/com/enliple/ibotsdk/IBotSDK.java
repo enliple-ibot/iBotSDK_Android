@@ -491,6 +491,11 @@ public class IBotSDK {
         return false;
     }
 
+    public void chatClose() {
+        if ( IBotSDKChatActivity.activity != null )
+            IBotSDKChatActivity.activity.finish();
+    }
+
     public interface CallbackListener {
         void onCallback(String jsonStr);
     }
