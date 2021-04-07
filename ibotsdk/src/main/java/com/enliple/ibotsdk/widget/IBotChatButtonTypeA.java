@@ -1014,21 +1014,25 @@ public class IBotChatButtonTypeA extends FrameLayout {
     }
 
     public void startAutoScrolling() {
-        if (timer == null) {
-            timer = new Timer();
+        try {
+            if (timer == null) {
+                timer = new Timer();
 
-            if(timerTask != null) {
-                timerTask.cancel();
-                timerTask = null;
-            }
-
-            timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    moveScrollView();
+                if(timerTask != null) {
+                    timerTask.cancel();
+                    timerTask = null;
                 }
-            };
-            timer.schedule(timerTask, 1000, 10);
+
+                timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        moveScrollView();
+                    }
+                };
+                timer.schedule(timerTask, 1000, 10);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1052,35 +1056,45 @@ public class IBotChatButtonTypeA extends FrameLayout {
 
             // 그림자에 fade in animation 효과 주기 위해
             translationZ = 0;
-            if (eTimer == null) {
-                eTimer = new Timer();
+            try {
+                if (eTimer == null) {
+                    eTimer = new Timer();
 
-                if(eTimerTask != null) {
-                    eTimerTask.cancel();
-                    eTimerTask = null;
-                }
-
-                eTimerTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        if ( translationZ < 16 ) {
-                            translationZ = translationZ + 1;
-                            btnBackground.setTranslationZ(translationZ);
-                        } else {
-                            barAnimation();
-                            eTimerTask.cancel();
-                            eTimerTask = null;
-                        }
+                    if(eTimerTask != null) {
+                        eTimerTask.cancel();
+                        eTimerTask = null;
                     }
-                };
-                eTimer.schedule(eTimerTask, 0, 30);
+
+                    eTimerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if ( translationZ < 16 ) {
+                                translationZ = translationZ + 1;
+                                btnBackground.setTranslationZ(translationZ);
+                            } else {
+                                barAnimation();
+                                eTimerTask.cancel();
+                                eTimerTask = null;
+                            }
+                        }
+                    };
+                    eTimer.schedule(eTimerTask, 0, 30);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         Log.e("TAG", "onDetachedFromWindow");
+        if(timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+
         if(eTimerTask != null) {
             eTimerTask.cancel();
             eTimerTask = null;

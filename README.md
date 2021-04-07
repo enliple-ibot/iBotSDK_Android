@@ -18,7 +18,7 @@ or use Maven:
 <dependency>
   <groupId>com.enliple</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.69</version>
+  <version>0.0.70</version>
   <type>pom</type>
 </dependency>
 ```
