@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1075,5 +1076,15 @@ public class IBotChatButtonTypeA extends FrameLayout {
                 eTimer.schedule(eTimerTask, 0, 30);
             }
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        Log.e("TAG", "onDetachedFromWindow");
+        if(eTimerTask != null) {
+            eTimerTask.cancel();
+            eTimerTask = null;
+        }
+        super.onDetachedFromWindow();
     }
 }
