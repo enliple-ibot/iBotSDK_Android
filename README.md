@@ -9,16 +9,16 @@ use Gradle:
 
 ```xml
    dependencies {
-      implementation 'com.enliple:ibotsdk:0.0.68'
+      implementation 'io.github.enliple-ibot:ibotsdk:1.0.0'
    }
 ```
 or use Maven:
 
 ```xml
 <dependency>
-  <groupId>com.enliple</groupId>
+  <groupId>io.github.enliple-ibot</groupId>
   <artifactId>ibotsdk</artifactId>
-  <version>0.0.70</version>
+  <version>1.0.0</version>
   <type>pom</type>
 </dependency>
 ```
