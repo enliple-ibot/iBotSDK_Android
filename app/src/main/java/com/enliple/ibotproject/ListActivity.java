@@ -15,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ListActivity extends Activity {
-    public static final String API_KEY = "발급 받은 api key";
+    public static final String API_KEY = "02";
 
     public int ITEM_SDK = 0;
     public int ITEM_CUSTOM_BUTTON = 1;

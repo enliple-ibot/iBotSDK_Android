@@ -110,6 +110,8 @@ public class IBotSDK {
     }
 
     public void unregisterReceiver() {
+        if ( button != null )
+            button.cancelAllTimer();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
     }
 
@@ -138,7 +140,8 @@ public class IBotSDK {
                 if ( result ) {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
-                        url = jsonObject.optString("url");
+                        //url = jsonObject.optString("url");
+                        url = "http://112.175.17.117:8884/index.html?mallId=738&app=true";
                         modifyDt = jsonObject.optString("modifyDt");
                         floatingMessage = jsonObject.optString("floatingMessage");
                         slideColor = jsonObject.optString("slideColor");

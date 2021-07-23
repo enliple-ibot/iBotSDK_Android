@@ -1090,6 +1090,11 @@ public class IBotChatButtonTypeA extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         Log.e("TAG", "onDetachedFromWindow");
+        cancelAllTimer();
+        super.onDetachedFromWindow();
+    }
+
+    public void cancelAllTimer() {
         if(timerTask != null) {
             timerTask.cancel();
             timerTask = null;
@@ -1099,6 +1104,5 @@ public class IBotChatButtonTypeA extends FrameLayout {
             eTimerTask.cancel();
             eTimerTask = null;
         }
-        super.onDetachedFromWindow();
     }
 }

@@ -1,14 +1,17 @@
 buildscript {
     ext.bintray_version = '0.9.1'
     ext.ibot_sdk_version = "0.0.70"
+    ext.kotlin_version = "1.4.32"
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
-        classpath "com.novoda:bintray-release:$bintray_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //classpath "com.novoda:bintray-release:$bintray_version"
     }
 }
 
@@ -16,10 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-
-        maven {
-            url  "https://dl.bintray.com/enliple-ibot/maven"
-        }
+        mavenCentral()
     }
 }
 
