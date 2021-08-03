@@ -36,8 +36,12 @@ import java.util.UUID;
 //import androidx.annotation.RequiresApi;
 
 public class IBotSDK {
+
+    public static final String EVENT_IBOTACTIVITY_STARTED = "EVENT_IBOTACTIVITY_STARTED";
+
     public static final String EVENT_CALLBACK = "EVENT_CALLBACK";
     public static final String KEY_CALLBACK = "KEY_CALLBACK";
+
     private static final long MAX_CLICK_DURATION = 150;
     private static final long MAX_CLICK_DISTANCE = 70;
     private static final int SET_RESOURCE = 1;
@@ -107,6 +111,7 @@ public class IBotSDK {
 
     private void registerBR(Context context) {
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, new IntentFilter(EVENT_CALLBACK));
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, new IntentFilter(EVENT_IBOTACTIVITY_STARTED));
     }
 
     public void unregisterReceiver() {
@@ -116,6 +121,7 @@ public class IBotSDK {
     }
 
     public void initSDKForCustomButton() {
+
         new IBotNetworkAsyncTask().init(apiKey, getUUID(context), getSDKVersion(), getOSVersion(), context.getPackageName(), new IBotNetworkAsyncTask.OnDefaultObjectCallbackListener() {
             @Override
             public void onResponse(boolean result, Object obj) {
@@ -140,8 +146,8 @@ public class IBotSDK {
                 if ( result ) {
                     try {
                         JSONObject jsonObject = new JSONObject(obj.toString());
-                        //url = jsonObject.optString("url");
-                        url = "http://112.175.17.117:8884/index.html?mallId=738&app=true";
+                        url = jsonObject.optString("url");
+
                         modifyDt = jsonObject.optString("modifyDt");
                         floatingMessage = jsonObject.optString("floatingMessage");
                         slideColor = jsonObject.optString("slideColor");
@@ -501,6 +507,7 @@ public class IBotSDK {
 
     public interface CallbackListener {
         void onCallback(String jsonStr);
+        void onIBotActivityStarted();
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -511,6 +518,10 @@ public class IBotSDK {
                 String str = it.getStringExtra(KEY_CALLBACK);
                 if ( callbackListener != null )
                     callbackListener.onCallback(str);
+            }
+            else if (EVENT_IBOTACTIVITY_STARTED.equals(action)) {
+                if ( callbackListener != null )
+                    callbackListener.onIBotActivityStarted();
             }
         }
     };

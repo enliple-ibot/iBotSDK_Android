@@ -178,6 +178,11 @@ public class IBotSDKChatActivity extends Activity {
 //                    webView.loadUrl(loadUrl);
 //            }
 //        });
+
+
+        Intent sendIntent = new Intent(IBotSDK.EVENT_IBOTACTIVITY_STARTED);
+        LocalBroadcastManager.getInstance(IBotSDKChatActivity.this).sendBroadcast(sendIntent);
+
         if ( loadUrl != null && !TextUtils.isEmpty(loadUrl) )
             webView.loadUrl(loadUrl);
     }
